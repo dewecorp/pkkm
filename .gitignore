@@ -1,0 +1,24 @@
+# Dependencies
+/vendor/
+
+# Environment & configs
+.env
+
+# Uploads
+/public/uploads/bukti/*
+!/public/uploads/bukti/.gitkeep
+
+# Exclude scripts & database dumps
+*.bat
+*.sql
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

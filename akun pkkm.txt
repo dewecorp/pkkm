@@ -1,0 +1,9 @@
+Administrator: admin / admin123
+Kepala Madrasah: kamad / kamad123
+Penilai 6 Kelompok:
+Kepala Seksi: penilai_ks / penilai123
+Ketua Yayasan: penilai_ky / penilai123
+Pengawas: penilai_wasmad / penilai123
+Guru: penilai_guru / penilai123
+Tenaga Kependidikan: penilai_tendik / penilai123
+Komite: penilai_komite / penilai123
