@@ -18,6 +18,7 @@ use App\Controllers\Admin\KepalaController;
 use App\Controllers\Admin\PenggunaController;
 use App\Controllers\Admin\InstrumenController;
 use App\Controllers\Admin\AuditLogController;
+use App\Controllers\Admin\PengaturanController;
 
 $router = new Router();
 
@@ -86,6 +87,11 @@ $router->post('/admin/instrumen/indikator/delete', [InstrumenController::class, 
 // ── Admin: Audit Log ────────────────────────────────────────────────────────
 $router->get('/admin/audit-log',        [AuditLogController::class, 'index'], ['admin']);
 $router->post('/admin/audit-log/clear', [AuditLogController::class, 'clear'], ['admin']);
+
+// ── Admin: Pengaturan Sistem & Tampilan ──────────────────────────────────────
+$router->get('/admin/pengaturan',          [PengaturanController::class, 'index'],   ['admin']);
+$router->post('/admin/pengaturan/update',  [PengaturanController::class, 'update'],  ['admin']);
+$router->post('/admin/pengaturan/reset-bg',[PengaturanController::class, 'resetBg'], ['admin']);
 
 // Dispatch
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

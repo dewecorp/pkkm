@@ -128,6 +128,7 @@
             ['icon'=>'fa-chart-pie',      'label'=>'Rekapitulasi',     'url'=>'laporan',                  'key'=>'laporan'],
             ['icon'=>'fa-folder-open',    'label'=>'Bukti Dukung',     'url'=>'bukti',                    'key'=>'bukti'],
             ['icon'=>'fa-file-lines',     'label'=>'Audit Log',        'url'=>'admin/audit-log',          'key'=>'audit'],
+            ['icon'=>'fa-gear',           'label'=>'Pengaturan',       'url'=>'admin/pengaturan',         'key'=>'pengaturan'],
         ];
         $navKamad = [
             ['icon'=>'fa-gauge-high',     'label'=>'Dashboard',        'url'=>'kamad/dashboard',          'key'=>'dashboard'],

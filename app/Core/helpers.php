@@ -49,3 +49,20 @@ function audit_log(string $action, string $kategori, ?string $detail = null): vo
         // fail silently for audit logging
     }
 }
+
+function get_setting(string $kunci, ?string $default = null): ?string {
+    static $cache = null;
+    if ($cache === null) {
+        $cache = [];
+        try {
+            $pdo = getDbConnection();
+            $rows = $pdo->query("SELECT kunci, nilai FROM pengaturan")->fetchAll(\PDO::FETCH_KEY_PAIR);
+            if ($rows) {
+                $cache = $rows;
+            }
+        } catch (\Exception $e) {
+            // table might not exist
+        }
+    }
+    return $cache[$kunci] ?? $default;
+}

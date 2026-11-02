@@ -1,300 +1,345 @@
+<?php
+$bgImage = get_setting('login_bg_image', 'img/gedung-kemenag.jpg');
+$loginTitle = get_setting('login_title', 'Aplikasi Penilaian Kinerja Kepala Madrasah');
+$loginSubtitle = get_setting('login_subtitle', 'Kementerian Agama Kabupaten Jepara');
+$loginDesc = get_setting('login_desc', 'Sistem informasi untuk mendukung penilaian kinerja kepala madrasah secara transparan, akuntabel, dan terintegrasi pada lingkungan Kementerian Agama Kabupaten Jepara.');
+?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PKKM — Masuk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PKKM — <?= e($loginTitle) ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            50:  '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            800: '#3730a3',
-                            900: '#312e81',
-                        }
-                    },
-                    backgroundImage: {
-                        'grid-white': "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.05)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e\")",
-                    }
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'] },
                 }
             }
         }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-        .input-field {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: #fff;
-            transition: all .2s;
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        .input-field::placeholder { color: rgba(255,255,255,0.35); }
-        .input-field:focus {
+
+        /* Fullscreen background gedung */
+        .bg-gedung {
+            background-image: url('<?= base_url($bgImage) ?>');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        /* Islamic Geometric Girih Star Overlay on Right Side */
+        .bg-islamic-girih {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%231b5e3d' fill-opacity='0.08'%3E%3Cpath d='M40 0l6.18 12.52 13.82-1.3-3.66 13.4 10.66 8.94-11.4 7.96 4.64 13.1-13.38-3.74L40 60.5l-6.86-9.62-13.38 3.74 4.64-13.1-11.4-7.96 10.66-8.94-3.66-13.4 13.82 1.3z'/%3E%3Cpath d='M40 20l3.09 6.26 6.91-.65-1.83 6.7 5.33 4.47-5.7 3.98 2.32 6.55-6.69-1.87L40 50.25l-3.43-4.81-6.69 1.87 2.32-6.55-5.7-3.98 5.33-4.47-1.83-6.7 6.91.65z' fill='%231b5e3d' fill-opacity='0.06'/%3E%3Ccircle cx='40' cy='40' r='10' stroke='%231b5e3d' stroke-opacity='0.08' stroke-width='1.5' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        /* Input styling */
+        .input-login {
+            border: 1px solid #cbd5e1;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+        .input-login:focus {
+            border-color: #1e6347;
+            box-shadow: 0 0 0 3px rgba(30, 99, 71, 0.15);
             outline: none;
-            border-color: rgba(99,102,241,0.7);
-            background: rgba(255,255,255,0.09);
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
         }
-        .btn-login {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
-            box-shadow: 0 4px 24px rgba(99,102,241,0.45);
-            transition: all .2s;
+
+        /* Button styling matching the image */
+        .btn-kemenag {
+            background-color: #1e6347;
+            transition: all 0.2s ease;
         }
-        .btn-login:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 32px rgba(99,102,241,0.55);
+        .btn-kemenag:hover {
+            background-color: #164f38;
+            box-shadow: 0 6px 16px rgba(30, 99, 71, 0.35);
         }
-        .btn-login:active { transform: translateY(0); }
-        .floating-card {
-            animation: float 6s ease-in-out infinite;
+
+        /* Glass / Floating Card shadow */
+        .floating-card-shadow {
+            box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.32), 0 0 1px 1px rgba(255, 255, 255, 0.7) inset;
         }
-        .floating-card-2 {
-            animation: float 8s ease-in-out infinite;
-            animation-delay: -3s;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
-        .stat-badge {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+
+        /* Subtle Islamic Ornament Pattern for Wave Banner */
+        .islamic-wave-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M30 0l4.63 9.39 10.37-.97-2.74 10.05 8 6.7-8.55 5.97 3.48 9.82-10.04-2.8L30 45.38l-5.15-7.22-10.04 2.8 3.48-9.82-8.55-5.97 8-6.7-2.74-10.05 10.37.97z'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
         }
     </style>
 </head>
-<body class="min-h-screen flex" style="background: #0f0e17;">
+<body class="h-full w-full bg-slate-900 select-none overflow-hidden relative">
 
-    <!-- LEFT PANEL — Branding & Visual -->
-    <div class="hidden lg:flex lg:w-[58%] relative overflow-hidden flex-col justify-between p-12"
-         style="background: linear-gradient(135deg, #0f0e17 0%, #1a1040 40%, #0d1b4b 70%, #0a2a6e 100%);">
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 1. FULLSCREEN BACKGROUND (GEDUNG + ISLAMIC OVERLAY)            -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="absolute inset-0 bg-gedung"></div>
 
-        <!-- Grid overlay -->
-        <div class="absolute inset-0 bg-grid-white opacity-40 pointer-events-none"></div>
+    <!-- Soft White-to-Transparent Vignette on the right side for floating card -->
+    <div class="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/20 via-white/10 to-white/70"></div>
 
-        <!-- Decorative blobs -->
-        <div class="absolute top-[-80px] left-[-80px] w-[400px] h-[400px] rounded-full opacity-20 pointer-events-none"
-             style="background: radial-gradient(circle, #6366f1 0%, transparent 70%); filter: blur(60px);"></div>
-        <div class="absolute bottom-[-100px] right-[-60px] w-[350px] h-[350px] rounded-full opacity-15 pointer-events-none"
-             style="background: radial-gradient(circle, #06b6d4 0%, transparent 70%); filter: blur(70px);"></div>
-        <div class="absolute top-[40%] right-[10%] w-[200px] h-[200px] rounded-full opacity-10 pointer-events-none"
-             style="background: radial-gradient(circle, #a855f7 0%, transparent 70%); filter: blur(50px);"></div>
-
-        <!-- Logo & Brand -->
-        <div class="relative z-10">
-            <div class="flex items-center space-x-3">
-                <div class="w-11 h-11 rounded-2xl flex items-center justify-center font-black text-white text-xl shadow-lg"
-                     style="background: linear-gradient(135deg, #6366f1, #4338ca);">P</div>
-                <div>
-                    <div class="text-white font-bold text-lg tracking-tight">PKKM</div>
-                    <div class="text-xs font-medium" style="color: rgba(255,255,255,0.45);">Kementerian Agama RI</div>
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 2. TOP-LEFT BADGE: Semanak, Kemenag Berdampak, Pusaka          -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="absolute top-5 left-5 sm:top-6 sm:left-8 z-20">
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 shadow-lg border border-slate-200/80 flex items-center space-x-3 sm:space-x-4">
+            <!-- Semanak Jepara -->
+            <div class="flex items-center space-x-2 border-r border-slate-200 pr-3">
+                <img src="<?= base_url('img/semanak-ijo.png') ?>" alt="Semanak Jepara" class="h-5 sm:h-6 w-auto object-contain">
+            </div>
+            <!-- Kemenag Berdampak Tagline -->
+            <div class="flex items-center space-x-1.5 border-r border-slate-200 pr-3">
+                <div class="w-5 h-5 rounded-md bg-emerald-700 text-white flex items-center justify-center text-[9px] font-black">
+                    <i class="fa-solid fa-shapes"></i>
+                </div>
+                <div class="leading-none">
+                    <div class="text-[10px] font-extrabold text-emerald-800">Kemenag</div>
+                    <div class="text-[8px] font-bold text-amber-600 tracking-tight">Berdampak</div>
+                </div>
+            </div>
+            <!-- Pusaka SuperApps -->
+            <div class="flex items-center space-x-1">
+                <div class="w-5 h-5 rounded-full bg-cyan-600/10 text-cyan-700 flex items-center justify-center text-[10px]">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                </div>
+                <div class="leading-none hidden sm:block">
+                    <div class="text-[10px] font-bold text-slate-700">pusaka</div>
+                    <div class="text-[7px] text-slate-400">Kemenag SuperApps</div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Center Content -->
-        <div class="relative z-10 space-y-8">
-            <div class="space-y-4">
-                <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-                     style="background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); color: #a5b4fc;">
-                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-                    <span>Sistem Penilaian Digital Terintegrasi</span>
-                </div>
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 3. BOTTOM-LEFT: Organic Fluid Wave Banner (Matching Mockup)     -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="absolute inset-x-0 bottom-0 z-20 pointer-events-none select-none">
+        <svg class="w-full h-auto min-h-[220px] max-h-[340px] pointer-events-none block" 
+             viewBox="0 0 1440 380" 
+             preserveAspectRatio="none" 
+             fill="none" 
+             xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Green Dark Gradient -->
+                <linearGradient id="waveGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#18613f" />
+                    <stop offset="45%" stop-color="#155536" />
+                    <stop offset="100%" stop-color="#0f3d27" />
+                </linearGradient>
+                <!-- Golden Gradient Line -->
+                <linearGradient id="goldRibbon" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.9" />
+                    <stop offset="30%" stop-color="#fbbf24" stop-opacity="1" />
+                    <stop offset="65%" stop-color="#fef08a" stop-opacity="0.95" />
+                    <stop offset="100%" stop-color="#d97706" stop-opacity="0.8" />
+                </linearGradient>
+                <!-- Subtle Islamic Star Pattern fill for wave -->
+                <pattern id="islamicPatternWave" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <path d="M25 0l3.86 7.82 8.64-.81-2.28 8.37 6.66 5.58-7.12 4.97 2.9 8.18-8.36-2.33L25 37.8l-4.29-6.02-8.36 2.33 2.9-8.18-7.12-4.97 6.66-5.58-2.28-8.37 8.64.81z" fill="#ffffff" fill-opacity="0.04" />
+                </pattern>
+            </defs>
 
-                <h1 class="text-5xl font-black text-white leading-tight tracking-tight">
-                    Penilaian<br>
-                    <span style="background: linear-gradient(90deg, #818cf8, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Kinerja</span><br>
-                    Kepala Madrasah
-                </h1>
+            <!-- Shadow underneath wave -->
+            <path d="M0,130 C320,60 620,170 940,240 C1140,285 1320,335 1440,360 L1440,380 L0,380 Z" fill="#000000" fill-opacity="0.25" />
 
-                <p class="text-base leading-relaxed max-w-sm" style="color: rgba(255,255,255,0.5);">
-                    Platform digital resmi PKKM — kelola, nilai, dan pantau kinerja kepala madrasah secara transparan dan akuntabel.
-                </p>
-            </div>
+            <!-- Main Green Fluid Wave Body -->
+            <path d="M0,120 C320,50 620,160 940,230 C1140,275 1320,325 1440,350 L1440,380 L0,380 Z" fill="url(#waveGreen)" />
+            <path d="M0,120 C320,50 620,160 940,230 C1140,275 1320,325 1440,350 L1440,380 L0,380 Z" fill="url(#islamicPatternWave)" />
 
-            <!-- Floating Stat Cards -->
-            <div class="space-y-3">
-                <div class="floating-card flex items-center space-x-4 p-4 rounded-2xl stat-badge glass max-w-xs">
-                    <div class="w-10 h-10 rounded-xl flex items-center justify-center text-indigo-300 text-base shrink-0"
-                         style="background: rgba(99,102,241,0.2);">
-                        <i class="fa-solid fa-layer-group"></i>
-                    </div>
-                    <div>
-                        <div class="text-xs font-medium" style="color: rgba(255,255,255,0.45);">Komponen Penilaian</div>
-                        <div class="text-white font-bold text-sm">5 Komponen · 108 Butir Indikator</div>
-                    </div>
-                </div>
+            <!-- Golden Glowing Accent Line On Top Edge of the Curve -->
+            <path d="M0,120 C320,50 620,160 940,230 C1140,275 1320,325 1440,350" 
+                  stroke="url(#goldRibbon)" 
+                  stroke-width="5" 
+                  stroke-linecap="round" 
+                  fill="none" />
+        </svg>
 
-                <div class="floating-card-2 flex items-center space-x-4 p-4 rounded-2xl stat-badge glass max-w-xs ml-6">
-                    <div class="w-10 h-10 rounded-xl flex items-center justify-center text-emerald-300 text-base shrink-0"
-                         style="background: rgba(16,185,129,0.2);">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div>
-                        <div class="text-xs font-medium" style="color: rgba(255,255,255,0.45);">Kelompok Penilai</div>
-                        <div class="text-white font-bold text-sm">6 Kelompok · KS, KY, WASMAD, dll</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom Footer Brand -->
-        <div class="relative z-10">
-            <p class="text-xs" style="color: rgba(255,255,255,0.3);">
-                © <?= date('Y') ?> Bidang Pendidikan Madrasah · Kanwil Kemenag Jawa Tengah
+        <!-- Typography Content Overlay Placed Beautifully inside Wave -->
+        <div class="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 lg:bottom-12 lg:left-14 max-w-xl pointer-events-auto space-y-2.5">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight drop-shadow-md">
+                <?= nl2br(e($loginTitle)) ?>
+            </h1>
+            <p class="text-xs sm:text-[13px] text-emerald-100/90 leading-relaxed font-normal max-w-lg drop-shadow-sm">
+                <?= e($loginDesc) ?>
             </p>
         </div>
     </div>
 
-    <!-- RIGHT PANEL — Login Form -->
-    <div class="flex-1 flex items-center justify-center p-6 lg:p-12 relative"
-         style="background: #13111f;">
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 4. FLOATING LOGIN CARD WITH ISLAMIC PATTERN (RIGHT SIDE)       -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="absolute inset-0 flex items-center justify-center lg:justify-end lg:pr-12 xl:pr-16 z-30 pointer-events-none p-4">
+        
+        <!-- The Floating Card: Pure White with Islamic Pattern Texture -->
+        <div class="w-full max-w-[410px] bg-white bg-islamic-girih rounded-[32px] sm:rounded-[36px] floating-card-shadow p-6 sm:p-8 border border-white/80 pointer-events-auto relative overflow-hidden backdrop-blur-sm animate-fade-in">
+            
+            <!-- Logo Kemenag Ikhlas Beramal -->
+            <div class="text-center space-y-2">
+                <div class="flex justify-center">
+                    <img src="<?= base_url('img/logo-kemenag.svg') ?>" 
+                         alt="Logo Kementerian Agama" 
+                         class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-sm">
+                </div>
 
-        <!-- Mobile logo -->
-        <div class="absolute top-6 left-6 lg:hidden flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-white text-base"
-                 style="background: linear-gradient(135deg, #6366f1, #4338ca);">P</div>
-            <span class="text-white font-bold text-sm">PKKM</span>
-        </div>
+                <div>
+                    <h2 class="text-base sm:text-lg font-bold text-slate-800 tracking-tight leading-snug">
+                        <?= e($loginTitle) ?>
+                    </h2>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">
+                        <?= e($loginSubtitle) ?>
+                    </p>
+                </div>
 
-        <div class="w-full max-w-sm space-y-8">
-            <!-- Heading -->
-            <div class="space-y-2">
-                <h2 class="text-3xl font-black text-white tracking-tight">Selamat Datang</h2>
-                <p class="text-sm" style="color: rgba(255,255,255,0.45);">
-                    Masuk ke akun Anda untuk melanjutkan
-                </p>
+                <!-- Golden Diamond Ornament Decor -->
+                <div class="flex items-center justify-center pt-0.5">
+                    <span class="w-2 h-2 rotate-45 bg-amber-500 rounded-[1px]"></span>
+                </div>
             </div>
 
-            <!-- Form -->
-            <form id="loginForm" class="space-y-5" autocomplete="off">
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-3.5 mt-4" autocomplete="off">
                 <?= csrf_field() ?>
 
-                <!-- Username -->
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold tracking-wider uppercase" style="color: rgba(255,255,255,0.5);">Username</label>
+                <!-- Field NIP/NIK/Username -->
+                <div class="space-y-1">
+                    <label class="block text-[11px] font-bold text-slate-700 tracking-tight">
+                        NIP/NIK
+                    </label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" style="color: rgba(255,255,255,0.3);">
-                            <i class="fa-solid fa-user text-sm"></i>
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-user text-xs"></i>
                         </span>
-                        <input type="text" name="username" required
-                            placeholder="Masukkan username Anda"
-                            class="input-field w-full pl-11 pr-4 py-3 rounded-xl text-sm font-medium">
+                        <input type="text" 
+                               name="username" 
+                               required 
+                               placeholder="Masukkan NIP/NIK Anda" 
+                               class="input-login w-full pl-9 pr-3 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400">
                     </div>
                 </div>
 
-                <!-- Password -->
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold tracking-wider uppercase" style="color: rgba(255,255,255,0.5);">Password</label>
+                <!-- Field Password -->
+                <div class="space-y-1">
+                    <label class="block text-[11px] font-bold text-slate-700 tracking-tight">
+                        Password
+                    </label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" style="color: rgba(255,255,255,0.3);">
-                            <i class="fa-solid fa-lock text-sm"></i>
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-lock text-xs"></i>
                         </span>
-                        <input type="password" name="password" id="pwdField" required
-                            placeholder="Masukkan password Anda"
-                            class="input-field w-full pl-11 pr-11 py-3 rounded-xl text-sm font-medium">
-                        <button type="button" onclick="togglePwd()" class="absolute inset-y-0 right-0 pr-4 flex items-center"
-                                style="color: rgba(255,255,255,0.3);">
-                            <i class="fa-solid fa-eye text-sm" id="eyeIcon"></i>
+                        <input type="password" 
+                               name="password" 
+                               id="pwdField" 
+                               required 
+                               placeholder="Masukkan Password" 
+                               class="input-login w-full pl-9 pr-9 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400">
+                        <button type="button" 
+                                onclick="togglePwd()" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition">
+                            <i class="fa-regular fa-eye text-xs" id="eyeIcon"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Submit -->
-                <button type="submit" id="btnSubmit"
-                    class="btn-login w-full py-3.5 rounded-xl text-white font-bold text-sm flex items-center justify-center space-x-2">
-                    <span>Masuk ke Sistem</span>
-                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                </button>
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between text-[11px] pt-0.5">
+                    <label class="inline-flex items-center space-x-1.5 text-slate-600 cursor-pointer select-none">
+                        <input type="checkbox" name="remember" class="w-3.5 h-3.5 rounded border-slate-300 text-emerald-700 focus:ring-emerald-600">
+                        <span>Ingat saya</span>
+                    </label>
+                    <a href="javascript:void(0)" 
+                       onclick="Swal.fire('Lupa Password', 'Silakan hubungi administrator Seksi Pendidikan Madrasah Kemenag Kabupaten Jepara untuk reset password akun Anda.', 'info')"
+                       class="text-slate-600 hover:text-emerald-700 font-medium transition">
+                        Lupa password?
+                    </a>
+                </div>
+
+                <!-- Login Button with Arrow -->
+                <div class="pt-1.5">
+                    <button type="submit" 
+                            id="btnSubmit" 
+                            class="btn-kemenag w-full py-2.5 sm:py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm flex items-center justify-between transition shadow-md">
+                        <span class="w-4"></span>
+                        <span class="text-center font-bold tracking-wide">Login</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
             </form>
 
-            <!-- Role Guide -->
-            <div class="rounded-2xl p-4 space-y-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);">
-                <p class="text-xs font-semibold uppercase tracking-wider" style="color: rgba(255,255,255,0.35);">Akun Demo</p>
-                <div class="grid grid-cols-1 gap-2 text-xs">
-                    <?php
-                    $demos = [
-                        ['icon' => 'fa-shield-halved', 'color' => '#818cf8', 'bg' => 'rgba(99,102,241,0.15)', 'role' => 'Administrator', 'user' => 'admin', 'pass' => 'admin123'],
-                        ['icon' => 'fa-user-tie',      'color' => '#34d399', 'bg' => 'rgba(16,185,129,0.15)', 'role' => 'Kepala Madrasah', 'user' => 'kamad', 'pass' => 'kamad123'],
-                        ['icon' => 'fa-user-check',   'color' => '#fbbf24', 'bg' => 'rgba(245,158,11,0.15)', 'role' => 'Penilai (misal KS)', 'user' => 'penilai_ks', 'pass' => 'penilai123'],
-                    ];
-                    foreach ($demos as $d):
-                    ?>
-                    <button type="button" onclick="fillDemo('<?= $d['user'] ?>', '<?= $d['pass'] ?>')"
-                        class="flex items-center space-x-3 px-3 py-2 rounded-xl text-left transition hover:opacity-80"
-                        style="background: <?= $d['bg'] ?>; border: 1px solid <?= $d['bg'] ?>;">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style="background: <?= $d['bg'] ?>;">
-                            <i class="fa-solid <?= $d['icon'] ?> text-xs" style="color: <?= $d['color'] ?>;"></i>
-                        </div>
-                        <div>
-                            <div class="font-semibold" style="color: rgba(255,255,255,0.85);"><?= $d['role'] ?></div>
-                            <div style="color: rgba(255,255,255,0.4);"><?= $d['user'] ?> / <?= $d['pass'] ?></div>
-                        </div>
-                    </button>
-                    <?php endforeach; ?>
+            <!-- Info Box Bawah (Green Soft Badge) -->
+            <div class="rounded-xl p-3 bg-emerald-50/80 border border-emerald-200/60 flex items-start space-x-2.5 mt-3.5">
+                <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                    <i class="fa-solid fa-shield-check text-[10px]"></i>
                 </div>
+                <p class="text-[11px] text-emerald-900 leading-snug font-medium">
+                    Gunakan NIP dan password sesuai ketentuan yang telah diberikan oleh administrator.
+                </p>
             </div>
+
         </div>
     </div>
 
+    <!-- Script Handle Login & Toggle Password -->
     <script>
     function togglePwd() {
         const f = document.getElementById('pwdField');
         const i = document.getElementById('eyeIcon');
         if (f.type === 'password') {
             f.type = 'text';
-            i.className = 'fa-solid fa-eye-slash text-sm';
+            i.className = 'fa-regular fa-eye-slash text-xs';
         } else {
             f.type = 'password';
-            i.className = 'fa-solid fa-eye text-sm';
+            i.className = 'fa-regular fa-eye text-xs';
         }
     }
-    function fillDemo(u, p) {
-        document.querySelector('input[name="username"]').value = u;
-        document.querySelector('input[name="password"]').value = p;
-    }
+
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('btnSubmit');
+        const oldContent = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memverifikasi...';
+        btn.innerHTML = '<span class="w-full text-center"><i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memverifikasi...</span>';
 
         const formData = new FormData(this);
         try {
             const response = await fetch('<?= base_url('login') ?>', { method: 'POST', body: formData });
             const res = await response.json();
             if (res.success) {
-                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Berhasil!';
-                btn.style.background = 'linear-gradient(135deg,#059669,#047857)';
-                setTimeout(() => { window.location.href = res.redirect; }, 800);
+                btn.innerHTML = '<span class="w-full text-center"><i class="fa-solid fa-check mr-1.5"></i> Berhasil! Mengalihkan...</span>';
+                btn.style.backgroundColor = '#15803d';
+                setTimeout(() => { window.location.href = res.redirect; }, 600);
             } else {
                 Swal.fire({
-                    icon: 'error', title: 'Login Gagal',
+                    icon: 'error',
+                    title: 'Login Gagal',
                     text: res.message,
-                    background: '#1e1b33',
-                    color: '#e2e8f0',
-                    confirmButtonColor: '#6366f1',
-                    iconColor: '#f87171',
+                    confirmButtonColor: '#1e6347',
                 });
                 btn.disabled = false;
-                btn.innerHTML = '<span>Masuk ke Sistem</span><i class="fa-solid fa-arrow-right ml-2 text-sm"></i>';
+                btn.innerHTML = oldContent;
             }
         } catch(err) {
-            Swal.fire({ icon: 'error', title: 'Kesalahan Jaringan', text: 'Tidak dapat terhubung ke server.', background: '#1e1b33', color: '#e2e8f0', confirmButtonColor: '#6366f1' });
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan Jaringan',
+                text: 'Tidak dapat terhubung ke server.',
+                confirmButtonColor: '#1e6347'
+            });
             btn.disabled = false;
-            btn.innerHTML = '<span>Masuk ke Sistem</span><i class="fa-solid fa-arrow-right ml-2 text-sm"></i>';
+            btn.innerHTML = oldContent;
         }
     });
     </script>
