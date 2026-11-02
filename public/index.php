@@ -34,6 +34,8 @@ $router->get('/kamad/dashboard',   [DashboardController::class, 'kamadDashboard'
 $router->get('/penilai/dashboard', [DashboardController::class, 'penilaiDashboard'],['penilai']);
 
 // Penilaian Individual
+$router->get('/penilai/penilaian',     [PenilaianController::class, 'index'],     ['admin','penilai']);
+$router->get('/penilaian',             [PenilaianController::class, 'index'],     ['admin','penilai']);
 $router->get('/penilaian/form/{id}',   [PenilaianController::class, 'form'],      ['admin','penilai']);
 $router->post('/penilaian/save-score', [PenilaianController::class, 'saveScore'], ['admin','penilai']);
 $router->post('/penilaian/submit',     [PenilaianController::class, 'submit'],    ['admin','penilai']);

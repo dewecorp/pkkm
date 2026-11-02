@@ -6,6 +6,48 @@ use App\Services\CalculationService;
 use PDO;
 
 class PenilaianController {
+    public function index() {
+        $pdo = getDbConnection();
+        $userId = Auth::id();
+
+        // Get all assessments for this penilai or all if admin
+        $sql = "
+            SELECT p.*, pp.periode_id, pp.kelompok_id, kp.kode_kelompok, kp.nama_kelompok, kp.bobot_default,
+                   per.nama_periode, per.tahun_penilaian, per.jenis_penilaian, per.status as periode_status,
+                   m.nama_madrasah, km.nama_lengkap as nama_kamad,
+                   (
+                       SELECT COUNT(*) FROM snapshot_indikator si 
+                       WHERE si.periode_id = per.id
+                   ) as total_indikator,
+                   (
+                       SELECT COUNT(*) FROM detail_penilaian dp 
+                       WHERE dp.penilaian_id = p.id AND dp.skor IS NOT NULL
+                   ) as terisi_indikator
+            FROM penilaian p
+            JOIN periode_penilai pp ON p.periode_penilai_id = pp.id
+            JOIN kelompok_penilai kp ON pp.kelompok_id = kp.id
+            JOIN periode_penilaian per ON p.periode_id = per.id
+            JOIN madrasah m ON per.madrasah_id = m.id
+            JOIN kepala_madrasah km ON per.kamad_id = km.id
+        ";
+
+        if (!Auth::hasRole('admin')) {
+            $sql .= " WHERE p.user_id = ? ORDER BY per.id DESC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$userId]);
+        } else {
+            $sql .= " ORDER BY per.id DESC, kp.id ASC";
+            $stmt = $pdo->query($sql);
+        }
+
+        $list = $stmt->fetchAll();
+
+        view('penilaian.index', [
+            'title' => 'Form Penilaian Kinerja',
+            'list'  => $list,
+        ]);
+    }
+
     public function form(int $penilaianId) {
         $pdo = getDbConnection();
         $userId = Auth::id();

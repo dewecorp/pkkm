@@ -101,8 +101,17 @@ class DashboardController {
         // Get penugasan aktif
         $stmt = $pdo->prepare("
             SELECT pp.*, p.nama_periode, p.tahun_penilaian, p.jenis_penilaian, p.status as periode_status,
-                   kp.nama_kelompok, kp.kode_kelompok, m.nama_madrasah, km.nama_lengkap as nama_kamad,
-                   pen.id as penilaian_id, pen.status as status_penilaian, pen.nilai_akhir, pen.predikat
+                   p.tanggal_mulai, p.tanggal_selesai, p.tempat_penilaian,
+                   kp.nama_kelompok, kp.kode_kelompok, kp.bobot_default, m.nama_madrasah, km.nama_lengkap as nama_kamad,
+                   pen.id as penilaian_id, pen.status as status_penilaian, pen.nilai_akhir, pen.total_skor, pen.predikat, pen.submitted_at,
+                   (
+                       SELECT COUNT(*) FROM snapshot_indikator si 
+                       WHERE si.periode_id = p.id
+                   ) as total_indikator,
+                   (
+                       SELECT COUNT(*) FROM detail_penilaian dp 
+                       WHERE dp.penilaian_id = pen.id AND dp.skor IS NOT NULL
+                   ) as terisi_indikator
             FROM periode_penilai pp
             JOIN periode_penilaian p ON pp.periode_id = p.id
             JOIN kelompok_penilai kp ON pp.kelompok_id = kp.id
@@ -115,9 +124,34 @@ class DashboardController {
         $stmt->execute([$userId]);
         $assignments = $stmt->fetchAll();
 
+        // Per-component breakdown for active assessment
+        $activeAssignment = $assignments[0] ?? null;
+        $componentProgress = [];
+        if ($activeAssignment && !empty($activeAssignment['penilaian_id'])) {
+            $penId = $activeAssignment['penilaian_id'];
+            $perId = $activeAssignment['periode_id'];
+            $kompStmt = $pdo->prepare("
+                SELECT sk.id, sk.nomor_komponen, sk.nama_komponen,
+                       COUNT(DISTINCT si.id) as total_indikator,
+                       COUNT(DISTINCT dp.id) as terisi_indikator,
+                       COALESCE(SUM(dp.skor), 0) as total_skor
+                FROM snapshot_komponen sk
+                LEFT JOIN snapshot_tugas_utama stu ON stu.snapshot_komponen_id = sk.id
+                LEFT JOIN snapshot_indikator si ON si.snapshot_tugas_id = stu.id
+                LEFT JOIN detail_penilaian dp ON dp.snapshot_indikator_id = si.id AND dp.penilaian_id = ? AND dp.skor IS NOT NULL
+                WHERE sk.periode_id = ?
+                GROUP BY sk.id
+                ORDER BY sk.nomor_komponen ASC
+            ");
+            $kompStmt->execute([$penId, $perId]);
+            $componentProgress = $kompStmt->fetchAll();
+        }
+
         view('dashboard.penilai', [
-            'title' => 'Dashboard Penilai',
-            'assignments' => $assignments
+            'title'             => 'Dashboard Penilai',
+            'assignments'       => $assignments,
+            'activeAssignment'  => $activeAssignment,
+            'componentProgress' => $componentProgress,
         ]);
     }
 }

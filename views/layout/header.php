@@ -135,8 +135,9 @@
             ['icon'=>'fa-chart-bar',      'label'=>'Hasil Penilaian',  'url'=>'laporan',                  'key'=>'laporan'],
         ];
         $navPenilai = [
-            ['icon'=>'fa-gauge-high',     'label'=>'Dashboard',        'url'=>'penilai/dashboard',        'key'=>'dashboard'],
-            ['icon'=>'fa-folder-open',    'label'=>'Bukti Dukung',     'url'=>'bukti',                    'key'=>'bukti'],
+            ['icon'=>'fa-gauge-high',       'label'=>'Dashboard',         'url'=>'penilai/dashboard',        'key'=>'dashboard'],
+            ['icon'=>'fa-pen-to-square',    'label'=>'Form Penilaian',    'url'=>'penilai/penilaian',        'key'=>'penilaian'],
+            ['icon'=>'fa-folder-open',      'label'=>'Bukti Dukung',      'url'=>'bukti',                    'key'=>'bukti'],
         ];
 
         $nav = \App\Core\Auth::hasRole('admin') ? $navAdmin :

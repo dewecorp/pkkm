@@ -119,14 +119,15 @@
                                                 
                                                 <div class="grid grid-cols-4 gap-1.5">
                                                     <?php for ($s = 1; $s <= 4; $s++): ?>
-                                                        <label class="cursor-pointer">
+                                                        <label class="cursor-pointer select-none">
                                                             <input type="radio" name="skor_<?= $ind['id'] ?>" value="<?= $s ?>" 
                                                                 <?= ((int)($ind['skor'] ?? 0) === $s) ? 'checked' : '' ?>
                                                                 <?= ($penilaian['status'] === 'submitted' || $penilaian['status'] === 'locked') ? 'disabled' : '' ?>
                                                                 onchange="saveScore(<?= $penilaian['id'] ?>, <?= $ind['id'] ?>, <?= $s ?>)"
                                                                 class="peer sr-only">
-                                                            <div class="py-2.5 text-center text-xs font-bold rounded-lg border border-slate-200 text-slate-600 peer-checked:bg-navy-800 peer-checked:text-white peer-checked:border-navy-800 peer-disabled:opacity-60 transition">
-                                                                <?= $s ?>
+                                                            <div class="py-2.5 text-center text-xs font-bold rounded-xl border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 peer-checked:shadow-md peer-checked:ring-2 peer-checked:ring-indigo-300 peer-disabled:opacity-60 transition-all flex items-center justify-center space-x-1">
+                                                                <span><?= $s ?></span>
+                                                                <i class="fa-solid fa-check text-[10px] hidden peer-checked:inline-block"></i>
                                                             </div>
                                                         </label>
                                                     <?php endfor; ?>
@@ -139,7 +140,7 @@
                                                         placeholder="Catatan penilai (opsional)..."
                                                         <?= ($penilaian['status'] === 'submitted' || $penilaian['status'] === 'locked') ? 'disabled' : '' ?>
                                                         onblur="saveScore(<?= $penilaian['id'] ?>, <?= $ind['id'] ?>, null)"
-                                                        class="w-full px-2.5 py-1.5 text-xs rounded border border-slate-200 focus:outline-none focus:ring-1 focus:ring-navy-700">
+                                                        class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
                                                 </div>
                                             </div>
                                         </div>
