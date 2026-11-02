@@ -8,9 +8,10 @@
 /public/uploads/bukti/*
 !/public/uploads/bukti/.gitkeep
 
-# Exclude scripts & database dumps
+# Exclude scripts, database dumps & text notes
 *.bat
 *.sql
+*.txt
 
 # Archives
 *.zip
