@@ -182,8 +182,8 @@ class PenilaianController {
             json_response(['success' => false, 'message' => 'Data penilaian tidak ditemukan!'], 404);
         }
 
-        if ($penilaian['status'] === 'submitted' || $penilaian['status'] === 'locked') {
-            json_response(['success' => false, 'message' => 'Penilaian sudah dikunci dan tidak dapat diubah!'], 403);
+        if ($penilaian['status'] === 'locked') {
+            json_response(['success' => false, 'message' => 'Penilaian sudah dikunci oleh administrator dan tidak dapat diubah!'], 403);
         }
 
         if (!Auth::hasRole('admin') && $penilaian['user_id'] != Auth::id()) {
@@ -242,18 +242,14 @@ class PenilaianController {
             json_response(['success' => false, 'message' => 'Akses ditolak!'], 403);
         }
 
-        $isTahunan = ($penilaian['jenis_penilaian'] === 'tahunan');
-        $expectedCount = $isTahunan ? 95 : 108;
-
         $cStmt = $pdo->prepare("SELECT COUNT(*) FROM detail_penilaian WHERE penilaian_id = ? AND skor IS NOT NULL");
         $cStmt->execute([$penilaianId]);
-        $actualCount = $cStmt->fetchColumn();
+        $actualCount = (int)$cStmt->fetchColumn();
 
-        if ($actualCount < $expectedCount) {
-            $sisa = $expectedCount - $actualCount;
+        if ($actualCount < 1) {
             json_response([
                 'success' => false, 
-                'message' => "Penilaian belum lengkap! Masih ada {$sisa} indikator yang belum dinilai."
+                'message' => "Berikan minimal 1 butir skor sebelum menyimpan & mengunci penilaian!"
             ], 422);
         }
 
@@ -273,7 +269,7 @@ class PenilaianController {
 
         json_response([
             'success' => true,
-            'message' => 'Penilaian berhasil disubmit dan dikunci!',
+            'message' => 'Nilai berhasil disubmit! Anda tetap dapat memperbarui nilai di lain waktu.',
             'redirect' => base_url('penilai/dashboard')
         ]);
     }

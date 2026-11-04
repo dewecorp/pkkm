@@ -39,10 +39,15 @@
                         <?= ucfirst(str_replace('_', ' ', $item['jenis_penilaian'])) ?> <?= $item['tahun_penilaian'] ?>
                     </span>
 
-                    <?php if ($isDone): ?>
-                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200">
+                    <?php if ($item['status'] === 'locked'): ?>
+                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200">
                         <i class="fa-solid fa-lock text-[10px]"></i>
-                        <span>Terkunci (Submitted)</span>
+                        <span>Terkunci Admin</span>
+                    </span>
+                    <?php elseif ($item['status'] === 'submitted'): ?>
+                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200">
+                        <i class="fa-solid fa-circle-check text-[10px]"></i>
+                        <span>Tersimpan (Dapat Diubah)</span>
                     </span>
                     <?php else: ?>
                     <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200">
@@ -91,9 +96,9 @@
 
                 <a href="<?= base_url('penilaian/form/' . $item['id']) ?>"
                    class="inline-flex items-center space-x-2 px-5 py-3 rounded-xl text-xs font-bold text-white shadow transition"
-                   style="background:<?= $isDone ? 'linear-gradient(135deg,#475569,#334155)' : 'linear-gradient(135deg,#6366f1,#4338ca)' ?>;">
-                    <i class="fa-solid <?= $isDone ? 'fa-eye' : 'fa-pen-to-square' ?>"></i>
-                    <span><?= $isDone ? 'Lihat Lembar Nilai' : 'Buka & Isi Formulir' ?></span>
+                   style="background:<?= ($item['status'] === 'locked') ? 'linear-gradient(135deg,#475569,#334155)' : 'linear-gradient(135deg,#6366f1,#4338ca)' ?>;">
+                    <i class="fa-solid <?= ($item['status'] === 'locked') ? 'fa-eye' : 'fa-pen-to-square' ?>"></i>
+                    <span><?= ($item['status'] === 'locked') ? 'Lihat Lembar Nilai' : ($item['status'] === 'submitted' ? 'Lanjutkan / Ubah Nilai' : 'Buka & Isi Formulir') ?></span>
                 </a>
             </div>
         </div>

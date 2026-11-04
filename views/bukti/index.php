@@ -86,7 +86,9 @@
                         <th class="px-6 py-3 w-16">Kode</th>
                         <th class="px-6 py-3 w-1/3">Uraian Indikator & Bukti Diharapkan</th>
                         <th class="px-6 py-3">Berkas Bukti Terunggah</th>
+                        <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
                         <th class="px-6 py-3 text-right w-40">Aksi</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -128,24 +130,30 @@
                                             <?= e($f['file_ext']) ?>
                                         </div>
                                         <div class="min-w-0">
+                                            <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
                                             <a href="<?= base_url('bukti/preview/' . $f['id']) ?>" target="_blank"
                                                 class="font-semibold text-slate-800 hover:text-brand-600 text-xs truncate block"
                                                 title="Buka preview: <?= e($f['nama_dokumen']) ?>">
                                                 <?= e($f['nama_dokumen']) ?>
                                             </a>
+                                            <?php else: ?>
+                                            <span class="font-semibold text-slate-800 text-xs truncate block" title="<?= e($f['nama_dokumen']) ?>">
+                                                <?= e($f['nama_dokumen']) ?>
+                                            </span>
+                                            <?php endif; ?>
                                             <div class="text-[10px] text-slate-400">
                                                 <?= round($f['file_size'] / 1024, 1) ?> KB · <?= e($f['kategori'] ?? 'Umum') ?> · <?= e($f['pengunggah']) ?>
                                             </div>
                                         </div>
                                     </div>
+                                    <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
                                     <div class="flex items-center space-x-1 shrink-0">
-                                        <!-- Preview Tab Baru (Bebas IDM) -->
+                                        <!-- Preview Tab Baru -->
                                         <a href="<?= base_url('bukti/preview/' . $f['id']) ?>" target="_blank"
                                             class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition"
                                             title="Buka Preview di Tab Baru">
                                             <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
                                         </a>
-                                        <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
                                         <!-- Edit Berkas / Informasi -->
                                         <button type="button" onclick="openEditModal(<?= htmlspecialchars(json_encode([
                                             'id' => $f['id'],
@@ -166,8 +174,8 @@
                                             title="Hapus Berkas">
                                             <i class="fa-solid fa-trash text-[11px]"></i>
                                         </button>
-                                        <?php endif; ?>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                                 <?php endforeach; ?>
                             </div>
@@ -176,19 +184,17 @@
                             <?php endif; ?>
                         </td>
 
+                        <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
                         <!-- Aksi Upload -->
                         <td class="px-6 py-4 align-top text-right">
-                            <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
                             <button onclick="openUploadModal(<?= $ind['id'] ?>, '<?= e($ind['kode_indikator']) ?>', '<?= htmlspecialchars(addslashes($ind['uraian_indikator'])) ?>')"
                                 class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 transition shadow-sm"
                                 title="Unggah berkas untuk butir ini">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                                 <span>Upload</span>
                             </button>
-                            <?php else: ?>
-                            <span class="text-[11px] text-slate-400">—</span>
-                            <?php endif; ?>
                         </td>
+                        <?php endif; ?>
                     </tr>
                     <?php endforeach; ?>
                     <?php endif; ?>

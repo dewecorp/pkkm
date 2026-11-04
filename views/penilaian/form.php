@@ -25,23 +25,31 @@
             </div>
 
             <!-- Submit Button / Status Lock -->
-            <?php if ($penilaian['status'] === 'submitted' || $penilaian['status'] === 'locked'): ?>
-                <div class="px-4 py-2 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold flex items-center space-x-1.5 border border-emerald-200">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>Telah Disubmit</span>
-                </div>
-                <?php if (\App\Core\Auth::hasRole('admin')): ?>
-                    <button onclick="unlockPenilaian(<?= $penilaian['id'] ?>)" class="px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition flex items-center space-x-1.5">
-                        <i class="fa-solid fa-lock-open"></i>
-                        <span>Buka Kunci</span>
+            <div class="flex items-center space-x-2">
+                <?php if ($penilaian['status'] === 'locked'): ?>
+                    <div class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold flex items-center space-x-1.5 border border-slate-200">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Terkunci oleh Admin</span>
+                    </div>
+                    <?php if (\App\Core\Auth::hasRole('admin')): ?>
+                        <button onclick="unlockPenilaian(<?= $penilaian['id'] ?>)" class="px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-lock-open"></i>
+                            <span>Buka Kunci</span>
+                        </button>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php if ($penilaian['status'] === 'submitted'): ?>
+                        <span class="inline-flex items-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200">
+                            <i class="fa-solid fa-circle-check text-[11px]"></i>
+                            <span>Tersimpan</span>
+                        </span>
+                    <?php endif; ?>
+                    <button onclick="submitPenilaian(<?= $penilaian['id'] ?>)" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow flex items-center space-x-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span><?= ($penilaian['status'] === 'submitted') ? 'Simpan / Submit Nilai' : 'Submit Nilai' ?></span>
                     </button>
                 <?php endif; ?>
-            <?php else: ?>
-                <button onclick="submitPenilaian(<?= $penilaian['id'] ?>)" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow flex items-center space-x-2">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>Submit & Kunci Nilai</span>
-                </button>
-            <?php endif; ?>
+            </div>
         </div>
     </div>
 
@@ -162,7 +170,7 @@
                                                         <label class="cursor-pointer select-none">
                                                             <input type="radio" name="skor_<?= $ind['id'] ?>" value="<?= $s ?>" 
                                                                 <?= ((int)($ind['skor'] ?? 0) === $s) ? 'checked' : '' ?>
-                                                                <?= ($penilaian['status'] === 'submitted' || $penilaian['status'] === 'locked') ? 'disabled' : '' ?>
+                                                                <?= ($penilaian['status'] === 'locked') ? 'disabled' : '' ?>
                                                                 onchange="saveScore(<?= $penilaian['id'] ?>, <?= $ind['id'] ?>, <?= $s ?>)"
                                                                 class="peer sr-only">
                                                             <div class="py-2.5 text-center text-xs font-bold rounded-xl border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 peer-checked:shadow-md peer-checked:ring-2 peer-checked:ring-indigo-300 peer-disabled:opacity-60 transition-all flex items-center justify-center space-x-1">
@@ -178,7 +186,7 @@
                                                     <input type="text" id="catatan_<?= $ind['id'] ?>" 
                                                         value="<?= e($ind['catatan_penilai'] ?? '') ?>"
                                                         placeholder="Catatan penilai (opsional)..."
-                                                        <?= ($penilaian['status'] === 'submitted' || $penilaian['status'] === 'locked') ? 'disabled' : '' ?>
+                                                        <?= ($penilaian['status'] === 'locked') ? 'disabled' : '' ?>
                                                         onblur="saveScore(<?= $penilaian['id'] ?>, <?= $ind['id'] ?>, null)"
                                                         class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
                                                 </div>
@@ -232,12 +240,20 @@ async function saveScore(penilaianId, indikatorId, forcedSkor = null) {
 }
 
 async function submitPenilaian(penilaianId) {
+    const terisi = document.getElementById('headerTerisiCount')?.innerText || '0';
+    const total = '<?= $total_indikator ?>';
+    
+    let infoText = 'Setelah disimpan & dikunci, skor Anda tidak dapat diubah lagi tanpa persetujuan administrator.';
+    if (parseInt(terisi) < parseInt(total)) {
+        infoText = `Anda telah mengisi ${terisi} dari total ${total} butir. Nilai tetap dapat disimpan tanpa harus menunggu semua butir atau berkas lengkap. Lanjutkan simpan & kunci?`;
+    }
+
     const confirm = await Swal.fire({
-        title: 'Submit Penilaian?',
-        text: 'Setelah disubmit, seluruh skor Anda akan terkunci dan tidak dapat diubah lagi.',
+        title: 'Simpan & Kunci Nilai?',
+        text: infoText,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Ya, Submit Sekarang',
+        confirmButtonText: 'Ya, Simpan & Kunci',
         cancelButtonText: 'Batal',
         confirmButtonColor: '#059669'
     });

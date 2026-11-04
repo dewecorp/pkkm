@@ -106,7 +106,7 @@ $groupDefs = [
                         <?php if ($grp['is_lengkap']): ?>
                         <span class="text-[10px] font-bold text-emerald-600"><i class="fa-solid fa-circle-check mr-0.5"></i>Lengkap</span>
                         <?php else: ?>
-                        <span class="text-[10px] font-bold text-amber-500"><i class="fa-solid fa-clock mr-0.5"></i>Menunggu</span>
+                        <span class="text-[10px] font-bold text-amber-500"><i class="fa-solid fa-clock mr-0.5"></i>Belum Lengkap</span>
                         <?php endif; ?>
                     </div>
                 </div>

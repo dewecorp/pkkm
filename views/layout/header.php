@@ -31,6 +31,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Global handler: Semua SweetAlert sukses otomatis auto close dengan timer
+        (function() {
+            if (typeof Swal !== 'undefined') {
+                const _origSwalFire = Swal.fire.bind(Swal);
+                Swal.fire = function(...args) {
+                    if (args.length === 3 && (args[2] === 'success' || args[0] === 'Berhasil' || args[0] === 'Berhasil!' || args[0] === 'Tersimpan')) {
+                        return _origSwalFire({
+                            icon: 'success',
+                            title: args[0],
+                            text: args[1],
+                            timer: 1500,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else if (typeof args[0] === 'object' && args[0] !== null) {
+                        const opt = args[0];
+                        const isSuccess = opt.icon === 'success' || 
+                                          opt.title === 'Berhasil' || 
+                                          opt.title === 'Berhasil!' || 
+                                          opt.title === 'Tersimpan' || 
+                                          opt.title === 'Terhapus!';
+                        if (isSuccess && opt.timer === undefined) {
+                            opt.timer = 1500;
+                            opt.timerProgressBar = true;
+                            opt.showConfirmButton = false;
+                        }
+                        return _origSwalFire(opt);
+                    }
+                    return _origSwalFire(...args);
+                };
+            }
+        })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { font-family: 'Inter', sans-serif; }

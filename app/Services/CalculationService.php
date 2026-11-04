@@ -92,6 +92,22 @@ class CalculationService {
      * NKTE = (4*KS + 2*KY + PM + GR + TK + KM) / 10
      */
     public function calculatePeriodeRekap(int $periodeId): array {
+        // Ambil jenis penilaian periode
+        $perStmt = $this->pdo->prepare("SELECT jenis_penilaian FROM periode_penilaian WHERE id = ?");
+        $perStmt->execute([$periodeId]);
+        $isTahunan = ($perStmt->fetchColumn() === 'tahunan');
+
+        // Total indikator aktif pada periode ini
+        $indCountStmt = $this->pdo->prepare("
+            SELECT COUNT(si.id)
+            FROM snapshot_indikator si
+            JOIN snapshot_tugas_utama stu ON si.snapshot_tugas_id = stu.id
+            JOIN snapshot_komponen sk ON stu.snapshot_komponen_id = sk.id
+            WHERE sk.periode_id = ? " . ($isTahunan ? "AND sk.nomor_komponen <= 4" : "") . "
+        ");
+        $indCountStmt->execute([$periodeId]);
+        $totalExpectedIndikator = (int)$indCountStmt->fetchColumn();
+
         // Ambil seluruh kelompok
         $kelompoks = $this->pdo->query("SELECT * FROM kelompok_penilai ORDER BY id ASC")->fetchAll();
         $groupAverages = [];
@@ -99,9 +115,10 @@ class CalculationService {
 
         foreach ($kelompoks as $k) {
             $kode = $k['kode_kelompok'];
-            // Ambil semua penilai wajib di kelompok ini untuk periode ini
+            // Ambil semua penilai wajib di kelompok ini beserta jumlah butir yang telah dinilai
             $st = $this->pdo->prepare("
-                SELECT pp.id, pp.status_penilaian, p.nilai_akhir, p.status as p_status, u.nama_lengkap
+                SELECT pp.id, pp.status_penilaian, p.nilai_akhir, p.status as p_status, u.nama_lengkap,
+                       (SELECT COUNT(*) FROM detail_penilaian dp WHERE dp.penilaian_id = p.id AND dp.skor IS NOT NULL) as answered_count
                 FROM periode_penilai pp
                 JOIN users u ON pp.user_id = u.id
                 LEFT JOIN penilaian p ON p.periode_penilai_id = pp.id
@@ -112,23 +129,31 @@ class CalculationService {
 
             $totalRaters = count($raters);
             $submittedRaters = 0;
+            $fullyCompletedRaters = 0;
             $sumNilai = 0.0;
 
             foreach ($raters as $r) {
                 if ($r['p_status'] === 'submitted' || $r['p_status'] === 'locked') {
                     $submittedRaters++;
                     $sumNilai += (float)($r['nilai_akhir'] ?? 0);
+
+                    // Penilai dinyatakan lengkap HANYA jika seluruh butir indikator telah dinilai
+                    if ($totalExpectedIndikator > 0 && (int)$r['answered_count'] >= $totalExpectedIndikator) {
+                        $fullyCompletedRaters++;
+                    }
                 }
             }
 
             $avg = $submittedRaters > 0 ? round($sumNilai / $submittedRaters, 2) : 0.0;
-            $isComplete = ($totalRaters > 0 && $submittedRaters === $totalRaters);
+            // Lengkap hanya jika seluruh penilai ada dan seluruh butir telah dinilai lengkap
+            $isComplete = ($totalRaters > 0 && $fullyCompletedRaters === $totalRaters);
 
             $groupAverages[$kode] = $avg;
             $groupDetails[$kode] = [
                 'kelompok' => $k,
                 'total_penilai' => $totalRaters,
                 'penilai_selesai' => $submittedRaters,
+                'penilai_lengkap' => $fullyCompletedRaters,
                 'is_lengkap' => $isComplete,
                 'rata_rata' => $avg,
                 'raters' => $raters
