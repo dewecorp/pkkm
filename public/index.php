@@ -44,8 +44,12 @@ $router->post('/penilaian/unlock',     [PenilaianController::class, 'unlock'],  
 
 // Bukti Dukung
 $router->get('/bukti',              [BuktiDukungController::class, 'index']);
-$router->post('/bukti/upload',      [BuktiDukungController::class, 'upload'],  ['admin','kamad']);
-$router->post('/bukti/delete/{id}', [BuktiDukungController::class, 'delete'],  ['admin','kamad']);
+$router->post('/bukti/upload',      [BuktiDukungController::class, 'upload'],      ['admin','kamad']);
+$router->post('/bukti/update/{id}', [BuktiDukungController::class, 'update'],      ['admin','kamad']);
+$router->post('/bukti/delete/{id}', [BuktiDukungController::class, 'delete'],      ['admin','kamad']);
+$router->get('/bukti/preview/{id}', [BuktiDukungController::class, 'previewPage']);
+$router->get('/bukti/stream/{id}',  [BuktiDukungController::class, 'streamFile']);
+$router->get('/bukti/view/{id}',    [BuktiDukungController::class, 'previewPage']);
 
 // Laporan & Rekapitulasi
 $router->get('/laporan',            [ReportController::class, 'index']);

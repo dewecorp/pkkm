@@ -82,6 +82,24 @@ class PenilaianController {
 
         $isTahunan = ($penilaian['jenis_penilaian'] === 'tahunan');
 
+        // Fetch all bukti dukung for this periode
+        $bStmt = $pdo->prepare("
+            SELECT bd.*, u.nama_lengkap as pengunggah
+            FROM bukti_dukung bd
+            JOIN users u ON bd.uploaded_by = u.id
+            WHERE bd.periode_id = ?
+            ORDER BY bd.id ASC
+        ");
+        $bStmt->execute([$penilaian['periode_id']]);
+        $allBukti = $bStmt->fetchAll();
+
+        $buktiByInd = [];
+        foreach ($allBukti as $b) {
+            if (!empty($b['snapshot_indikator_id'])) {
+                $buktiByInd[$b['snapshot_indikator_id']][] = $b;
+            }
+        }
+
         // Fetch Snapshot Komponen, Tugas Utama, and Indikator
         $kompStmt = $pdo->prepare("
             SELECT * FROM snapshot_komponen 
@@ -111,6 +129,12 @@ class PenilaianController {
                 ");
                 $iStmt->execute([$penilaianId, $t['id']]);
                 $indList = $iStmt->fetchAll();
+
+                foreach ($indList as &$indItem) {
+                    $indItem['bukti_list'] = $buktiByInd[$indItem['id']] ?? [];
+                }
+                unset($indItem);
+
                 $totalIndikator += count($indList);
 
                 $tugasArr[] = [

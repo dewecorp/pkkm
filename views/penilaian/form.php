@@ -103,14 +103,54 @@
                                                     <strong>Bukti Autentik Kualitas Kinerja:</strong> <?= e($ind['bukti_autentik']) ?>
                                                 </div>
 
-                                                <?php if ($ind['total_bukti'] > 0): ?>
-                                                    <div class="pt-1">
-                                                        <a href="<?= base_url('bukti?periode_id=' . $penilaian['periode_id']) ?>" target="_blank" class="inline-flex items-center space-x-1.5 text-xs text-emerald-700 hover:text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
-                                                            <i class="fa-solid fa-paperclip"></i>
-                                                            <span>Ada <?= $ind['total_bukti'] ?> Dokumen Bukti Dukung (Lihat)</span>
-                                                        </a>
-                                                    </div>
-                                                <?php endif; ?>
+                                                <!-- Bukti Dukung Terunggah -->
+                                                <div class="pt-2">
+                                                    <?php if (!empty($ind['bukti_list'])): ?>
+                                                        <div class="p-3 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2">
+                                                            <div class="flex items-center justify-between">
+                                                                <span class="text-[11px] font-bold text-slate-700 flex items-center space-x-1.5">
+                                                                    <i class="fa-solid fa-paperclip text-indigo-600"></i>
+                                                                    <span>Dokumen Bukti Dukung (<?= count($ind['bukti_list']) ?> berkas):</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                                <?php foreach ($ind['bukti_list'] as $bIdx => $b): ?>
+                                                                <div class="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200 hover:border-indigo-400 hover:shadow-xs transition group">
+                                                                    <div class="flex items-center space-x-2 min-w-0 pr-1.5">
+                                                                        <span class="w-5 h-5 rounded-md bg-slate-100 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0 border border-slate-200 shadow-xs">
+                                                                            <?= $bIdx + 1 ?>
+                                                                        </span>
+                                                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-indigo-50 text-indigo-700 border border-indigo-200/60 shrink-0">
+                                                                            <?= e($b['file_ext']) ?>
+                                                                        </span>
+                                                                        <div class="min-w-0">
+                                                                            <a href="<?= base_url('bukti/preview/' . $b['id']) ?>" target="_blank"
+                                                                               class="text-xs font-semibold text-slate-800 hover:text-indigo-600 truncate block"
+                                                                               title="Lihat Pratinjau: <?= e($b['nama_dokumen']) ?>">
+                                                                                <?= e($b['nama_dokumen']) ?>
+                                                                            </a>
+                                                                            <div class="text-[10px] text-slate-400 truncate">
+                                                                                <?= round($b['file_size'] / 1024, 1) ?> KB · <?= e($b['kategori'] ?? 'Umum') ?>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <a href="<?= base_url('bukti/preview/' . $b['id']) ?>" target="_blank"
+                                                                       class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white text-[11px] font-bold transition flex items-center space-x-1 shrink-0 shadow-xs"
+                                                                       title="Buka Preview di Tab Baru">
+                                                                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                                                        <span class="text-[10px]">Preview</span>
+                                                                    </a>
+                                                                </div>
+                                                                <?php endforeach; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div class="inline-flex items-center space-x-1.5 text-[11px] text-slate-400 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/60 italic">
+                                                             <i class="fa-regular fa-folder-open text-slate-400"></i>
+                                                             <span>Belum ada dokumen bukti dukung diunggah</span>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
                                             </div>
 
                                             <!-- Kanan: Segmented Control Skor 1-4 & Catatan -->
