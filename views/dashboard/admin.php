@@ -31,31 +31,48 @@ $groupDefs = [
 </div>
 
 <!-- ── KPI Cards ───────────────────────────────────────── -->
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-    <?php
-    $kpis = [
-        ['label'=>'Total Pengguna',   'value'=>$stats['total_users'],    'icon'=>'fa-users',          'color'=>'#6366f1','bg'=>'rgba(99,102,241,0.08)','change'=>''],
-        ['label'=>'Periode Penilaian','value'=>$stats['total_periode'],  'icon'=>'fa-calendar-check', 'color'=>'#10b981','bg'=>'rgba(16,185,129,0.08)','change'=>''],
-        ['label'=>'Penilai Aktif',    'value'=>$stats['total_penilai'],  'icon'=>'fa-user-check',     'color'=>'#f59e0b','bg'=>'rgba(245,158,11,0.08)','change'=>''],
-        ['label'=>'Skor NKTE',
-         'value'=> ($rekap && $rekap['nkte'] > 0) ? number_format($rekap['nkte'],2) : '—',
-         'icon'=>'fa-trophy',         'color'=>'#ef4444','bg'=>'rgba(239,68,68,0.08)',
-         'change'=> ($rekap && $rekap['nkte'] > 0) ? ($rekap['predikat']??'') : 'Menunggu Penilai'],
-    ];
-    foreach ($kpis as $k):
-    ?>
-    <div class="card card-hover p-5">
-        <div class="flex items-start justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center"
-                 style="background:<?= $k['bg'] ?>;">
-                <i class="fa-solid <?= $k['icon'] ?> text-sm" style="color:<?= $k['color'] ?>;"></i>
-            </div>
+<?php
+$predikat = ($rekap && $rekap['nkte'] > 0) ? ($rekap['predikat'] ?? '') : '';
+$kpis = [
+    ['label'=>'Total Pengguna',    'value'=>$stats['total_users'],
+     'icon'=>'fa-users',           'color'=>'#6366f1','grad'=>'linear-gradient(135deg,#818cf8,#4f46e5)','badge'=>''],
+    ['label'=>'Periode Penilaian', 'value'=>$stats['total_periode'],
+     'icon'=>'fa-calendar-check',  'color'=>'#10b981','grad'=>'linear-gradient(135deg,#34d399,#059669)','badge'=>''],
+    ['label'=>'Penilai Aktif',     'value'=>$stats['total_penilai'],
+     'icon'=>'fa-user-check',      'color'=>'#f59e0b','grad'=>'linear-gradient(135deg,#fbbf24,#d97706)','badge'=>''],
+    ['label'=>'Skor NKTE',
+     'value'=>($rekap && $rekap['nkte'] > 0) ? number_format($rekap['nkte'],2) : '—',
+     'icon'=>'fa-trophy',          'color'=>'#ef4444','grad'=>'linear-gradient(135deg,#fb7185,#e11d48)',
+     'badge'=>$predikat],
+];
+?>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <?php foreach ($kpis as $k): ?>
+    <div class="group relative rounded-xl bg-white border border-slate-100 p-4 sm:p-5
+                shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200
+                hover:-translate-y-0.5 hover:shadow-md hover:border-slate-200">
+
+        <!-- Label -->
+        <div class="text-[10px] sm:text-xs font-medium text-slate-500 leading-tight pr-10 sm:pr-11 whitespace-nowrap"><?= e($k['label']) ?></div>
+
+        <!-- Icon -->
+        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center text-white"
+             style="background:<?= $k['grad'] ?>;box-shadow:0 4px 10px -4px <?= $k['color'] ?>99;">
+            <i class="fa-solid <?= $k['icon'] ?> text-xs sm:text-sm"></i>
         </div>
-        <div class="text-2xl font-black text-slate-800 leading-none"><?= $k['value'] ?></div>
-        <div class="text-xs text-slate-500 font-medium mt-1.5"><?= $k['label'] ?></div>
-        <?php if ($k['change']): ?>
-        <div class="text-[11px] font-bold mt-1" style="color:<?= $k['color'] ?>"><?= e($k['change']) ?></div>
-        <?php endif; ?>
+
+        <!-- Value + badge -->
+        <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
+            <span class="text-[22px] sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-none tabular-nums">
+                <?= $k['value'] ?>
+            </span>
+            <?php if ($k['badge']): ?>
+            <span class="px-1.5 py-0.5 rounded-md text-[10px] font-bold"
+                  style="background:<?= $k['color'] ?>14;color:<?= $k['color'] ?>;">
+                <?= e($k['badge']) ?>
+            </span>
+            <?php endif; ?>
+        </div>
     </div>
     <?php endforeach; ?>
 </div>
