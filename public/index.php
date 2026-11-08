@@ -1,4 +1,12 @@
 <?php
+// Kompresi output (mod_deflate tidak aktif di Laragon)
+if (!ini_get('zlib.output_compression')
+    && extension_loaded('zlib')
+    && stripos($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip') !== false) {
+    ini_set('zlib.output_compression', 'On');
+    ini_set('zlib.output_compression_level', '6');
+}
+
 session_start();
 
 require_once __DIR__ . '/../vendor/autoload.php';

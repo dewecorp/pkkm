@@ -7,6 +7,13 @@ function base_url(string $path = ''): string {
     return $base . '/' . ltrim($path, '/');
 }
 
+function asset_url(string $path): string {
+    $path = ltrim($path, '/');
+    $file = __DIR__ . '/../../public/' . $path;
+    $version = is_file($file) ? filemtime($file) : null;
+    return base_url($path) . ($version ? '?v=' . $version : '');
+}
+
 function view(string $viewPath, array $data = []): void {
     extract($data);
     $viewFile = __DIR__ . '/../../views/' . str_replace('.', '/', $viewPath) . '.php';

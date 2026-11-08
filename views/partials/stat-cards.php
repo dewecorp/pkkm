@@ -7,7 +7,7 @@ $items = $items ?? [];
 ?>
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
     <?php foreach ($items as $k): ?>
-    <div class="group relative rounded-xl bg-white/70 backdrop-blur-xl border border-white/70 p-4 sm:p-5
+    <div class="group relative rounded-xl bg-white/85 border border-white/70 p-4 sm:p-5
                 shadow-[0_8px_30px_-18px_rgba(11,42,30,0.35)] transition-all duration-200
                 hover:-translate-y-0.5 hover:shadow-md hover:border-white">
 

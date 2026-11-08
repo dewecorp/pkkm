@@ -2,7 +2,7 @@
 
 <div class="space-y-6">
     <!-- Header Formulir (floating di desktop agar tombol submit selalu terjangkau) -->
-    <div class="card p-4 sm:p-6 sticky top-20 z-20 bg-white/85 backdrop-blur-xl border-white/80 shadow-[0_12px_36px_-20px_rgba(11,42,30,0.45)]">
+    <div class="card p-4 sm:p-6 sticky top-20 z-20 bg-white/95 border-white/80 shadow-[0_12px_36px_-20px_rgba(11,42,30,0.45)]">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div class="min-w-0 space-y-2.5">
                 <div class="flex flex-wrap items-center gap-2">

@@ -24,7 +24,7 @@ $groupDefs = [
     </div>
     <?php if ($periode): ?>
     <div class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+        <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
         <span><?= e($periode['nama_periode']) ?></span>
     </div>
     <?php endif; ?>

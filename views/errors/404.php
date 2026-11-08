@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>404 - Halaman Tidak Ditemukan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
 </head>
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
     <div class="text-center max-w-sm">

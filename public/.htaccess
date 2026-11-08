@@ -1,3 +1,28 @@
+# ── Kompresi (gzip/deflate) ──────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE application/xml image/svg+xml
+</IfModule>
+
+# ── Cache aset statis ────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                "access plus 30 days"
+    ExpiresByType application/javascript  "access plus 30 days"
+    ExpiresByType text/javascript         "access plus 30 days"
+    ExpiresByType image/svg+xml           "access plus 30 days"
+    ExpiresByType image/png               "access plus 30 days"
+    ExpiresByType image/jpeg              "access plus 30 days"
+    ExpiresByType image/webp              "access plus 30 days"
+    ExpiresByType font/woff2              "access plus 365 days"
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|mjs|svg|png|jpe?g|webp|woff2?)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     # Send Requests To Front Controller...

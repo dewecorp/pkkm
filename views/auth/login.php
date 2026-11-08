@@ -12,19 +12,12 @@ $loginDesc = get_setting('login_desc', 'Sistem informasi untuk mendukung penilai
     <title>PKKM — <?= e($loginTitle) ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'] },
-                }
-            }
-        }
-    </script>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <style>
         html, body {
             height: 100%;
@@ -185,7 +178,7 @@ $loginDesc = get_setting('login_desc', 'Sistem informasi untuk mendukung penilai
     <div class="absolute inset-0 flex items-center justify-center lg:justify-end lg:pr-12 xl:pr-16 z-30 pointer-events-none p-4">
         
         <!-- The Floating Card: Pure White with Islamic Pattern Texture -->
-        <div class="w-full max-w-[410px] bg-white bg-islamic-girih rounded-[32px] sm:rounded-[36px] floating-card-shadow p-6 sm:p-8 border border-white/80 pointer-events-auto relative overflow-hidden backdrop-blur-sm animate-fade-in">
+        <div class="w-full max-w-[410px] bg-white bg-islamic-girih rounded-[32px] sm:rounded-[36px] floating-card-shadow p-6 sm:p-8 border border-white/80 pointer-events-auto relative overflow-hidden backdrop-blur-sm">
             
             <!-- Logo Kemenag Ikhlas Beramal -->
             <div class="text-center space-y-2">
