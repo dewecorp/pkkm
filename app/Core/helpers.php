@@ -14,6 +14,35 @@ function asset_url(string $path): string {
     return base_url($path) . ($version ? '?v=' . $version : '');
 }
 
+function nav_items(): array {
+    $navAdmin = [
+        ['icon'=>'fa-gauge-high',     'label'=>'Dashboard',        'url'=>'admin/dashboard',          'key'=>'dashboard'],
+        ['icon'=>'fa-calendar-days',  'label'=>'Periode Penilaian','url'=>'admin/periode',            'key'=>'periode'],
+        ['icon'=>'fa-school',         'label'=>'Data Madrasah',    'url'=>'admin/madrasah',           'key'=>'madrasah'],
+        ['icon'=>'fa-user-tie',       'label'=>'Kepala Madrasah',  'url'=>'admin/kepala-madrasah',    'key'=>'kepala'],
+        ['icon'=>'fa-users',          'label'=>'Pengguna & Penilai','url'=>'admin/pengguna',          'key'=>'pengguna'],
+        ['icon'=>'fa-book-open',      'label'=>'Master Instrumen', 'url'=>'admin/instrumen',          'key'=>'instrumen'],
+        ['icon'=>'fa-chart-pie',      'label'=>'Rekapitulasi',     'url'=>'laporan',                  'key'=>'laporan'],
+        ['icon'=>'fa-folder-open',    'label'=>'Bukti Dukung',     'url'=>'bukti',                    'key'=>'bukti'],
+        ['icon'=>'fa-file-lines',     'label'=>'Audit Log',        'url'=>'admin/audit-log',          'key'=>'audit'],
+        ['icon'=>'fa-gear',           'label'=>'Pengaturan',       'url'=>'admin/pengaturan',         'key'=>'pengaturan'],
+    ];
+    $navKamad = [
+        ['icon'=>'fa-gauge-high',     'label'=>'Dashboard',        'url'=>'kamad/dashboard',          'key'=>'dashboard'],
+        ['icon'=>'fa-cloud-arrow-up', 'label'=>'Bukti Kinerja',    'url'=>'bukti',                    'key'=>'bukti'],
+        ['icon'=>'fa-chart-bar',      'label'=>'Hasil Penilaian',  'url'=>'laporan',                  'key'=>'laporan'],
+    ];
+    $navPenilai = [
+        ['icon'=>'fa-gauge-high',       'label'=>'Dashboard',         'url'=>'penilai/dashboard',        'key'=>'dashboard'],
+        ['icon'=>'fa-pen-to-square',    'label'=>'Form Penilaian',    'url'=>'penilai/penilaian',        'key'=>'penilaian'],
+        ['icon'=>'fa-folder-open',      'label'=>'Bukti Dukung',      'url'=>'bukti',                    'key'=>'bukti'],
+    ];
+
+    if (\App\Core\Auth::hasRole('admin')) return $navAdmin;
+    if (\App\Core\Auth::hasRole('kamad')) return $navKamad;
+    return $navPenilai;
+}
+
 function predikat_warna(?string $predikat): array {
     $map = [
         'Amat Baik' => ['bg' => '#ecfdf5', 'fg' => '#059669'],

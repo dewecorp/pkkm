@@ -48,6 +48,8 @@ $kpis = [
 ?>
 <?php view('partials.stat-cards', ['items' => $kpis]); ?>
 
+<?php view('partials.mobile-menu-grid', ['nav' => nav_items()]); ?>
+
 <!-- ── Main Grid: Kelompok + Chart ────────────────────── -->
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
 
@@ -165,29 +167,6 @@ $kpis = [
             </div>
             <?php endif; ?>
         </div>
-    </div>
-</div>
-
-<!-- ── Shortcut Action Cards ───────────────────────────── -->
-<div>
-    <h3 class="font-semibold text-slate-700 text-sm mb-3">Aksi Cepat</h3>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <?php
-        $actions = [
-            ['icon'=>'fa-calendar-plus', 'label'=>'Tambah Periode',   'url'=>'admin/periode',         'color'=>'#1e6347','bg'=>'rgba(30,99,71,0.08)'],
-            ['icon'=>'fa-user-plus',     'label'=>'Tambah Pengguna',  'url'=>'admin/pengguna',        'color'=>'#10b981','bg'=>'rgba(16,185,129,0.08)'],
-            ['icon'=>'fa-file-pdf',      'label'=>'Ekspor PDF',       'url'=>'laporan/pdf/1',         'color'=>'#ef4444','bg'=>'rgba(239,68,68,0.08)'],
-            ['icon'=>'fa-file-excel',    'label'=>'Ekspor Excel',     'url'=>'laporan/excel/1',       'color'=>'#059669','bg'=>'rgba(5,150,105,0.08)'],
-        ];
-        foreach ($actions as $ac):
-        ?>
-        <a href="<?= base_url($ac['url']) ?>" class="card card-hover flex flex-col items-center justify-center p-5 text-center space-y-3">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:<?= $ac['bg'] ?>;">
-                <i class="fa-solid <?= $ac['icon'] ?> text-lg" style="color:<?= $ac['color'] ?>;"></i>
-            </div>
-            <div class="text-xs font-semibold text-slate-700"><?= $ac['label'] ?></div>
-        </a>
-        <?php endforeach; ?>
     </div>
 </div>
 

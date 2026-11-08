@@ -7,13 +7,26 @@
 </footer>
 
 <script>
-function toggleSidebar() {
-    const sb = document.getElementById('sidebar');
-    const ov = document.getElementById('sidebarOverlay');
-    const hidden = sb.classList.contains('-translate-x-full');
-    sb.classList.toggle('-translate-x-full', !hidden);
-    ov.classList.toggle('hidden', !hidden);
-}
+// Sheet akun mobile
+window.bukaAkun = function () {
+    const sheet = document.getElementById('akunSheet');
+    if (sheet) sheet.classList.remove('hidden');
+};
+window.tutupAkun = function () {
+    const sheet = document.getElementById('akunSheet');
+    if (sheet) sheet.classList.add('hidden');
+};
+
+// Tombol kembali pada app bar mobile
+window.kembaliHalaman = function () {
+    const btn = document.getElementById('appBack');
+    const fallback = btn ? btn.dataset.fallback : null;
+    if (window.history.length > 1 && document.referrer) {
+        window.history.back();
+    } else if (fallback) {
+        window.location.href = fallback;
+    }
+};
 
 // Konfirmasi sebelum logout
 document.addEventListener('click', function (e) {
@@ -44,11 +57,10 @@ document.addEventListener('click', function (e) {
 
 // Notifikasi admin & kepala madrasah
 (function () {
-    const wrap = document.getElementById('notifWrap');
-    if (!wrap) return;
-
-    const badge = document.getElementById('notifBadge');
     const panel = document.getElementById('notifPanel');
+    if (!panel) return;
+
+    const badges = document.querySelectorAll('[data-notif-badge]');
     const list = document.getElementById('notifList');
     const url = '<?= base_url('notifikasi') ?>';
 
@@ -60,8 +72,13 @@ document.addEventListener('click', function (e) {
 
     function render(data) {
         const unread = data.unread || 0;
-        badge.textContent = unread > 99 ? '99+' : unread;
-        badge.classList.toggle('hidden', unread === 0);
+        badges.forEach(function (badge) {
+            badge.textContent = unread > 99 ? '99+' : unread;
+            badge.classList.toggle('hidden', unread === 0);
+        });
+
+        const tabDot = document.getElementById('notifTabDot');
+        if (tabDot) tabDot.classList.toggle('hidden', unread === 0);
 
         if (!data.items || !data.items.length) {
             list.innerHTML = '<div class="px-4 py-6 text-center text-xs text-slate-400">Belum ada notifikasi.</div>';
@@ -102,7 +119,8 @@ document.addEventListener('click', function (e) {
     };
 
     document.addEventListener('click', function (e) {
-        if (!wrap.contains(e.target)) panel.classList.add('hidden');
+        if (e.target.closest('[data-notif-toggle]')) return;
+        if (!panel.contains(e.target)) panel.classList.add('hidden');
     });
 
     muat();

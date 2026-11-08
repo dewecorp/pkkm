@@ -2,7 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e6347">
     <title><?= e($title ?? 'PKKM') ?> — Sistem Informasi PKKM</title>
     <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -143,17 +144,81 @@
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
         }
+        /* Ruang aman bawah untuk bottom nav mobile */
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+        .mobile-tab { -webkit-tap-highlight-color: transparent; }
+
+        /* ── Tabel jadi kartu di mobile (tanpa geser horizontal) ── */
+        @media (max-width: 1023.98px) {
+            table.table-stack { display: block; width: 100% !important; border-collapse: collapse; }
+            table.table-stack thead { display: none; }
+            table.table-stack tbody { display: block; width: 100%; }
+            table.table-stack tfoot { display: block; width: 100%; }
+            table.table-stack tbody > tr,
+            table.table-stack tfoot > tr {
+                display: block;
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 14px;
+                padding: 6px 14px;
+                margin: 0 0 12px;
+            }
+            table.table-stack tbody > tr:last-child,
+            table.table-stack tfoot > tr:last-child { margin-bottom: 0; }
+            table.table-stack td,
+            table.table-stack th {
+                display: block;
+                width: auto !important;
+                max-width: none !important;
+                padding: 9px 0 !important;
+                border: 0 !important;
+                text-align: left !important;
+                white-space: normal !important;
+                word-break: break-word;
+            }
+            table.table-stack td + td,
+            table.table-stack th + th { border-top: 1px solid #f1f5f9 !important; }
+            table.table-stack td[data-label]::before,
+            table.table-stack th[data-label]::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                color: #94a3b8;
+                margin-bottom: 4px;
+            }
+            table.table-stack td[data-label=""]::before { display: none; }
+            table.table-stack td.table-stack-plain { padding-top: 0 !important; }
+            table.table-stack .table-stack-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        }
     </style>
 </head>
 <body style="font-family:'Inter',sans-serif;">
 
-<!-- ===== TOPBAR ===== -->
-<header class="glass-topbar fixed top-0 left-0 right-0 z-40 h-16 border-b flex items-center px-4 lg:px-6 gap-4">
+<?php
+$uri = $_SERVER['REQUEST_URI'];
+$isActive = fn($path) => strpos($uri, $path) !== false;
+$nav = nav_items();
+$isDashboard = strpos($uri, '/dashboard') !== false;
 
-    <!-- Hamburger (mobile) -->
-    <button onclick="toggleSidebar()" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition">
-        <i class="fa-solid fa-bars text-base"></i>
-    </button>
+$dashboardUrl = \App\Core\Auth::hasRole('admin')
+    ? 'admin/dashboard'
+    : (\App\Core\Auth::hasRole('kamad') ? 'kamad/dashboard' : 'penilai/dashboard');
+
+$roleLabel = \App\Core\Auth::hasRole('admin')
+    ? 'Dashboard Admin'
+    : (\App\Core\Auth::hasRole('kamad') ? 'Dashboard Kepala Madrasah' : 'Dashboard Penilai');
+
+$appTitle = $title ?? 'PKKM';
+$userName = \App\Core\Auth::user()['nama_lengkap'] ?? 'Pengguna';
+$userInitial = strtoupper(substr($userName, 0, 1));
+$bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
+?>
+
+<!-- ===== TOPBAR (desktop) ===== -->
+<header class="glass-topbar hidden lg:flex fixed top-0 left-0 right-0 z-40 h-16 border-b items-center px-4 lg:px-6 gap-4">
 
     <!-- Logo -->
     <a href="<?= base_url('dashboard') ?>" class="flex items-center space-x-2.5 shrink-0">
@@ -167,37 +232,24 @@
 
     <div class="flex-1"></div>
 
-    <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
+    <?php if ($bolehNotif): ?>
     <!-- Notifikasi: hanya admin & kepala madrasah -->
-    <div class="relative" id="notifWrap">
-        <button type="button" onclick="toggleNotif()" aria-label="Notifikasi"
-                class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition">
-            <i class="fa-regular fa-bell text-base"></i>
-            <span id="notifBadge"
-                  class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">0</span>
-        </button>
-        <div id="notifPanel"
-             class="hidden absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden z-50">
-            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-                <span class="text-xs font-bold text-slate-700">Notifikasi</span>
-                <button type="button" onclick="bacaSemuaNotif()"
-                        class="text-[11px] font-semibold text-brand-600 hover:underline">Tandai dibaca</button>
-            </div>
-            <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-slate-100">
-                <div class="px-4 py-6 text-center text-xs text-slate-400">Memuat…</div>
-            </div>
-        </div>
-    </div>
+    <button type="button" data-notif-toggle onclick="toggleNotif()" aria-label="Notifikasi"
+            class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition">
+        <i class="fa-regular fa-bell text-base"></i>
+        <span data-notif-badge
+              class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">0</span>
+    </button>
     <?php endif; ?>
 
     <!-- User Chip -->
     <div class="flex items-center space-x-2.5 pl-2 border-l border-slate-100">
         <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white shrink-0"
              style="background:linear-gradient(135deg,#1e6347,#17503a);">
-            <?= strtoupper(substr(\App\Core\Auth::user()['nama_lengkap'] ?? 'U', 0, 1)) ?>
+            <?= $userInitial ?>
         </div>
         <div class="hidden sm:block">
-            <div class="text-xs font-semibold text-slate-700 leading-tight max-w-[140px] truncate"><?= e(\App\Core\Auth::user()['nama_lengkap'] ?? 'Pengguna') ?></div>
+            <div class="text-xs font-semibold text-slate-700 leading-tight max-w-[140px] truncate"><?= e($userName) ?></div>
             <?php $roles = \App\Core\Auth::roles(); ?>
             <div class="text-[10px] text-brand-600 font-semibold capitalize"><?= e(implode(', ', $roles)) ?></div>
         </div>
@@ -207,46 +259,82 @@
     </div>
 </header>
 
-<!-- Sidebar Overlay (mobile) -->
-<div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
+<!-- ===== APP BAR (mobile) ===== -->
+<header class="lg:hidden fixed top-0 left-0 right-0 z-40 h-16 rounded-b-3xl shadow-lg flex items-center gap-3 px-4"
+        style="background:linear-gradient(135deg,#1e6347 0%,#17503a 100%);">
 
-<!-- ===== SIDEBAR ===== -->
-<aside id="sidebar" class="glass-sidebar fixed top-16 left-0 bottom-0 z-30 w-64 border-r flex flex-col overflow-y-auto scrollbar-hide
-    -translate-x-full lg:translate-x-0">
+    <?php if ($isDashboard): ?>
+        <!-- Dashboard: logo + nama aplikasi -->
+        <a href="<?= base_url($dashboardUrl) ?>" class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 border border-white/25"
+                 style="background:rgba(255,255,255,0.14);">P</div>
+            <div class="min-w-0">
+                <div class="text-white font-bold text-sm leading-tight tracking-tight">PKKM</div>
+                <div class="text-white/70 text-[10px] leading-tight truncate"><?= e($roleLabel) ?></div>
+            </div>
+        </a>
+
+        <div class="flex-1"></div>
+
+        <?php if ($bolehNotif): ?>
+        <button type="button" data-notif-toggle onclick="toggleNotif()" aria-label="Notifikasi"
+                class="relative w-9 h-9 rounded-full flex items-center justify-center text-white shrink-0"
+                style="background:rgba(255,255,255,0.14);">
+            <i class="fa-regular fa-bell text-base"></i>
+            <span data-notif-badge
+                  class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">0</span>
+        </button>
+        <?php endif; ?>
+
+        <button type="button" onclick="bukaAkun()" aria-label="Akun"
+                class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm text-white shrink-0 border border-white/25"
+                style="background:rgba(255,255,255,0.14);">
+            <?= $userInitial ?>
+        </button>
+
+    <?php else: ?>
+        <!-- Halaman menu: tombol kembali + judul halaman -->
+        <button type="button" id="appBack" data-fallback="<?= base_url($dashboardUrl) ?>"
+                onclick="kembaliHalaman()" aria-label="Kembali"
+                class="relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-white shrink-0"
+                style="background:rgba(255,255,255,0.14);">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+        </button>
+
+        <div class="absolute left-1/2 -translate-x-1/2 max-w-[60%] text-center">
+            <div class="text-white font-bold text-sm leading-tight truncate"><?= e($appTitle) ?></div>
+        </div>
+
+        <div class="flex-1"></div>
+
+        <button type="button" onclick="bukaAkun()" aria-label="Akun"
+                class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm text-white shrink-0 border border-white/25"
+                style="background:rgba(255,255,255,0.14);">
+            <?= $userInitial ?>
+        </button>
+    <?php endif; ?>
+</header>
+
+<?php if ($bolehNotif): ?>
+<!-- Panel notifikasi bersama (desktop & mobile) -->
+<div id="notifPanel"
+     class="hidden fixed top-[4.25rem] right-3 lg:right-6 w-80 max-w-[calc(100vw-1.5rem)] bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden z-50">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+        <span class="text-xs font-bold text-slate-700">Notifikasi</span>
+        <button type="button" onclick="bacaSemuaNotif()"
+                class="text-[11px] font-semibold text-brand-600 hover:underline">Tandai dibaca</button>
+    </div>
+    <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-slate-100">
+        <div class="px-4 py-6 text-center text-xs text-slate-400">Memuat…</div>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- ===== SIDEBAR (desktop only) ===== -->
+<aside id="sidebar" class="glass-sidebar fixed top-16 left-0 bottom-0 z-30 w-64 border-r hidden lg:flex flex-col overflow-y-auto scrollbar-hide">
 
     <!-- Nav Sections -->
     <nav class="flex-1 p-3 space-y-1">
-
-        <?php
-        $uri = $_SERVER['REQUEST_URI'];
-        $isActive = fn($path) => strpos($uri, $path) !== false;
-
-        $navAdmin = [
-            ['icon'=>'fa-gauge-high',     'label'=>'Dashboard',        'url'=>'admin/dashboard',          'key'=>'dashboard'],
-            ['icon'=>'fa-calendar-days',  'label'=>'Periode Penilaian','url'=>'admin/periode',            'key'=>'periode'],
-            ['icon'=>'fa-school',         'label'=>'Data Madrasah',    'url'=>'admin/madrasah',           'key'=>'madrasah'],
-            ['icon'=>'fa-user-tie',       'label'=>'Kepala Madrasah',  'url'=>'admin/kepala-madrasah',    'key'=>'kepala'],
-            ['icon'=>'fa-users',          'label'=>'Pengguna & Penilai','url'=>'admin/pengguna',          'key'=>'pengguna'],
-            ['icon'=>'fa-book-open',      'label'=>'Master Instrumen', 'url'=>'admin/instrumen',          'key'=>'instrumen'],
-            ['icon'=>'fa-chart-pie',      'label'=>'Rekapitulasi',     'url'=>'laporan',                  'key'=>'laporan'],
-            ['icon'=>'fa-folder-open',    'label'=>'Bukti Dukung',     'url'=>'bukti',                    'key'=>'bukti'],
-            ['icon'=>'fa-file-lines',     'label'=>'Audit Log',        'url'=>'admin/audit-log',          'key'=>'audit'],
-            ['icon'=>'fa-gear',           'label'=>'Pengaturan',       'url'=>'admin/pengaturan',         'key'=>'pengaturan'],
-        ];
-        $navKamad = [
-            ['icon'=>'fa-gauge-high',     'label'=>'Dashboard',        'url'=>'kamad/dashboard',          'key'=>'dashboard'],
-            ['icon'=>'fa-cloud-arrow-up', 'label'=>'Bukti Kinerja',    'url'=>'bukti',                    'key'=>'bukti'],
-            ['icon'=>'fa-chart-bar',      'label'=>'Hasil Penilaian',  'url'=>'laporan',                  'key'=>'laporan'],
-        ];
-        $navPenilai = [
-            ['icon'=>'fa-gauge-high',       'label'=>'Dashboard',         'url'=>'penilai/dashboard',        'key'=>'dashboard'],
-            ['icon'=>'fa-pen-to-square',    'label'=>'Form Penilaian',    'url'=>'penilai/penilaian',        'key'=>'penilaian'],
-            ['icon'=>'fa-folder-open',      'label'=>'Bukti Dukung',      'url'=>'bukti',                    'key'=>'bukti'],
-        ];
-
-        $nav = \App\Core\Auth::hasRole('admin') ? $navAdmin :
-               (\App\Core\Auth::hasRole('kamad') ? $navKamad : $navPenilai);
-        ?>
 
         <?php foreach ($nav as $item): ?>
             <?php $active = $isActive($item['key']); ?>
@@ -273,6 +361,97 @@
     </div>
 </aside>
 
+<?php
+$navByKey = [];
+foreach ($nav as $n) { $navByKey[$n['key']] = $n; }
+
+$mk = function (string $key, string $label) use ($navByKey) {
+    $n = $navByKey[$key];
+    return ['type' => 'link', 'key' => $key, 'icon' => $n['icon'], 'label' => $label, 'url' => $n['url']];
+};
+
+$mobileTabs = \App\Core\Auth::hasRole('admin')
+    ? [
+        $mk('dashboard', 'Beranda'),
+        $mk('periode', 'Periode'),
+        $mk('pengguna', 'Pengguna'),
+        $mk('laporan', 'Rekap'),
+        ['type' => 'menu', 'key' => 'menu', 'icon' => 'fa-table-cells-large', 'label' => 'Menu'],
+    ]
+    : (\App\Core\Auth::hasRole('kamad')
+        ? [
+            $mk('dashboard', 'Beranda'),
+            $mk('bukti', 'Bukti'),
+            $mk('laporan', 'Rekap'),
+            ['type' => 'notif', 'key' => 'notif', 'icon' => 'fa-bell', 'label' => 'Notif'],
+            ['type' => 'menu', 'key' => 'menu', 'icon' => 'fa-table-cells-large', 'label' => 'Menu'],
+        ]
+        : [
+            $mk('dashboard', 'Beranda'),
+            $mk('penilaian', 'Nilai'),
+            $mk('bukti', 'Bukti'),
+            ['type' => 'menu', 'key' => 'menu', 'icon' => 'fa-table-cells-large', 'label' => 'Menu'],
+            ['type' => 'akun', 'key' => 'akun', 'icon' => 'fa-circle-user', 'label' => 'Akun'],
+        ]);
+?>
+
+<!-- ===== BOTTOM NAV (mobile only, 5 tab) ===== -->
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 border-t border-slate-200 safe-bottom">
+    <div class="flex items-stretch">
+        <?php foreach ($mobileTabs as $tab): ?>
+        <?php
+            $active = $tab['type'] === 'link' ? $isActive($tab['key']) : false;
+            $cls = 'mobile-tab relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 '
+                 . ($active ? 'text-brand-600' : 'text-slate-400');
+        ?>
+        <?php if ($tab['type'] === 'link'): ?>
+            <a href="<?= base_url($tab['url']) ?>" class="<?= $cls ?>">
+                <i class="fa-solid <?= $tab['icon'] ?> text-[17px]"></i>
+                <span class="text-[10px] font-bold leading-none"><?= e($tab['label']) ?></span>
+            </a>
+        <?php elseif ($tab['type'] === 'menu'): ?>
+            <a href="<?= base_url($dashboardUrl) ?>#menuGrid" class="<?= $cls ?>">
+                <i class="fa-solid <?= $tab['icon'] ?> text-[17px]"></i>
+                <span class="text-[10px] font-bold leading-none"><?= e($tab['label']) ?></span>
+            </a>
+        <?php elseif ($tab['type'] === 'notif'): ?>
+            <button type="button" data-notif-toggle onclick="toggleNotif()" class="<?= $cls ?>">
+                <span id="notifTabDot" class="hidden absolute top-1.5 right-[calc(50%-14px)] w-2 h-2 rounded-full bg-rose-500"></span>
+                <i class="fa-solid <?= $tab['icon'] ?> text-[17px]"></i>
+                <span class="text-[10px] font-bold leading-none"><?= e($tab['label']) ?></span>
+            </button>
+        <?php else: ?>
+            <button type="button" onclick="bukaAkun()" class="<?= $cls ?>">
+                <i class="fa-solid <?= $tab['icon'] ?> text-[17px]"></i>
+                <span class="text-[10px] font-bold leading-none"><?= e($tab['label']) ?></span>
+            </button>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</nav>
+
+<!-- Sheet Akun (mobile) -->
+<div id="akunSheet" class="lg:hidden fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/40" onclick="tutupAkun()"></div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl p-5 safe-bottom shadow-2xl">
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-base shrink-0"
+                 style="background:linear-gradient(135deg,#1e6347,#17503a);">
+                <?= strtoupper(substr(\App\Core\Auth::user()['nama_lengkap'] ?? 'U', 0, 1)) ?>
+            </div>
+            <div class="min-w-0">
+                <div class="text-sm font-bold text-slate-800 truncate"><?= e(\App\Core\Auth::user()['nama_lengkap'] ?? 'Pengguna') ?></div>
+                <div class="text-[11px] text-brand-600 font-semibold capitalize"><?= e(implode(', ', \App\Core\Auth::roles())) ?></div>
+            </div>
+        </div>
+        <a href="<?= base_url('logout') ?>" data-logout
+           class="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-rose-50 text-rose-600 font-bold text-sm">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Keluar</span>
+        </a>
+    </div>
+</div>
+
 <!-- ===== MAIN CONTENT ===== -->
 <div class="lg:ml-64 pt-16 min-h-screen flex flex-col">
-    <main class="glass-page flex-1 p-4 lg:p-6 max-w-screen-xl">
+    <main class="glass-page flex-1 p-4 pb-24 lg:p-6 lg:pb-6 max-w-screen-xl">

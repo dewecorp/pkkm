@@ -13,7 +13,7 @@
 
 <div class="card overflow-hidden">
 <div class="overflow-x-auto">
-<table class="w-full text-left text-xs">
+<table class="table-stack w-full text-left text-xs">
     <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase text-[10px] font-semibold tracking-wider">
         <tr>
             <th class="px-5 py-3.5">Pengguna</th>
@@ -27,7 +27,7 @@
     <tbody class="divide-y divide-slate-50">
     <?php foreach ($rows as $r): ?>
     <tr class="hover:bg-slate-50 transition group">
-        <td class="px-5 py-4">
+        <td class="px-5 py-4" data-label="Pengguna">
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs text-white shrink-0" style="background:linear-gradient(135deg,#1e6347,#17503a);">
                     <?= strtoupper(substr($r['nama_lengkap'],0,1)) ?>
@@ -38,24 +38,24 @@
                 </div>
             </div>
         </td>
-        <td class="px-5 py-4">
+        <td class="px-5 py-4" data-label="NIP / Jabatan">
             <div class="text-slate-700"><?= e($r['nip'] ?: '-') ?></div>
             <div class="text-slate-400 text-[11px]"><?= e($r['jabatan'] ?: '-') ?></div>
         </td>
-        <td class="px-5 py-4">
+        <td class="px-5 py-4" data-label="Role">
             <?php foreach (explode(', ', $r['roles_text']??'') as $rl): if(!$rl) continue; ?>
             <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-50 text-brand-700 border border-brand-200 mr-1"><?= e($rl) ?></span>
             <?php endforeach; ?>
         </td>
-        <td class="px-5 py-4 text-slate-500 text-[11px]"><?= e($r['kelompok_text'] ?: '—') ?></td>
-        <td class="px-5 py-4">
+        <td class="px-5 py-4 text-slate-500 text-[11px]" data-label="Kelompok"><?= e($r['kelompok_text'] ?: '—') ?></td>
+        <td class="px-5 py-4" data-label="Status">
             <button onclick="toggleStatus(<?= $r['id'] ?>, this)"
                 class="px-2.5 py-1 rounded-full text-[10px] font-bold transition <?= $r['status']==='aktif' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500' ?>">
                 <?= $r['status']==='aktif' ? 'Aktif' : 'Nonaktif' ?>
             </button>
         </td>
-        <td class="px-5 py-4 text-right">
-            <div class="flex items-center justify-end space-x-1.5">
+        <td class="px-5 py-4 text-right" data-label="Aksi">
+            <div class="flex items-center justify-end space-x-1.5 table-stack-actions">
                 <button onclick='editUser(<?= htmlspecialchars(json_encode($r)) ?>)' title="Edit Pengguna"
                     class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 transition">
                     <i class="fa-solid fa-pen-to-square text-xs"></i>

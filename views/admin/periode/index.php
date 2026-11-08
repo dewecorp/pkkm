@@ -20,7 +20,7 @@ $statusList = [['draft','Draft'],['aktif','Aktif'],['selesai','Selesai'],['arsip
 
 <div class="card overflow-hidden">
     <div class="overflow-x-auto">
-    <table class="w-full text-left text-xs">
+    <table class="table-stack w-full text-left text-xs">
         <thead class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] border-b border-slate-100">
             <tr class="bg-slate-50">
                 <th class="px-5 py-3.5">Nama Periode</th>
@@ -42,17 +42,17 @@ $statusList = [['draft','Draft'],['aktif','Aktif'],['selesai','Selesai'],['arsip
             $cls = $sc[$r['status']] ?? 'bg-slate-100 text-slate-600';
         ?>
         <tr class="hover:bg-slate-50/70 transition group">
-            <td class="px-5 py-4 font-semibold text-slate-800"><?= e($r['nama_periode']) ?></td>
-            <td class="px-5 py-4 text-slate-600 max-w-[150px] truncate"><?= e($r['nama_madrasah']) ?></td>
-            <td class="px-5 py-4 text-slate-600 max-w-[150px] truncate"><?= e($r['nama_kamad']) ?></td>
-            <td class="px-5 py-4 font-semibold text-slate-700"><?= e($r['tahun_penilaian']) ?></td>
-            <td class="px-5 py-4"><?= $r['jenis_penilaian']==='tahunan' ? 'Tahunan' : '4 Tahunan' ?></td>
-            <td class="px-5 py-4 text-slate-500">v<?= e($r['nomor_versi']) ?></td>
-            <td class="px-5 py-4">
+            <td class="px-5 py-4 font-semibold text-slate-800" data-label="Nama Periode"><?= e($r['nama_periode']) ?></td>
+            <td class="px-5 py-4 text-slate-600 max-w-[150px] truncate" data-label="Madrasah"><?= e($r['nama_madrasah']) ?></td>
+            <td class="px-5 py-4 text-slate-600 max-w-[150px] truncate" data-label="Kepala Madrasah"><?= e($r['nama_kamad']) ?></td>
+            <td class="px-5 py-4 font-semibold text-slate-700" data-label="Tahun"><?= e($r['tahun_penilaian']) ?></td>
+            <td class="px-5 py-4" data-label="Jenis"><?= $r['jenis_penilaian']==='tahunan' ? 'Tahunan' : '4 Tahunan' ?></td>
+            <td class="px-5 py-4 text-slate-500" data-label="Versi">v<?= e($r['nomor_versi']) ?></td>
+            <td class="px-5 py-4" data-label="Status">
                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold <?= $cls ?>"><?= ucfirst($r['status']) ?></span>
             </td>
-            <td class="px-5 py-4 text-right">
-                <div class="flex items-center justify-end space-x-1.5">
+            <td class="px-5 py-4 text-right" data-label="Aksi">
+                <div class="flex items-center justify-end space-x-1.5 table-stack-actions">
                     <button onclick="editPeriode(<?= htmlspecialchars(json_encode($r)) ?>)"
                         class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 transition"
                         title="Edit Periode">
@@ -68,7 +68,7 @@ $statusList = [['draft','Draft'],['aktif','Aktif'],['selesai','Selesai'],['arsip
         </tr>
         <?php endforeach; ?>
         <?php else: ?>
-        <tr><td colspan="8" class="px-5 py-12 text-center text-slate-400">
+        <tr><td colspan="8" class="px-5 py-12 text-center text-slate-400" data-label="">
             <i class="fa-solid fa-calendar-xmark text-3xl mb-2 block"></i>Belum ada periode penilaian
         </td></tr>
         <?php endif; ?>

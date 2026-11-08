@@ -18,7 +18,7 @@
 <!-- Table -->
 <div class="card overflow-hidden">
 <div class="overflow-x-auto">
-<table class="w-full text-left text-xs">
+<table class="table-stack w-full text-left text-xs">
     <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase text-[10px] font-semibold tracking-wider">
         <tr>
             <th class="px-5 py-3.5">Nama Kepala Madrasah</th>
@@ -34,7 +34,7 @@
     <?php if (!empty($rows)): ?>
     <?php foreach ($rows as $r): ?>
     <tr class="hover:bg-slate-50 transition group">
-        <td class="px-5 py-4">
+        <td class="px-5 py-4" data-label="Nama Kepala Madrasah">
             <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm text-white shrink-0"
                      style="background:linear-gradient(135deg,#1e6347,#17503a);">
@@ -46,24 +46,24 @@
                 </div>
             </div>
         </td>
-        <td class="px-5 py-4 text-slate-600 max-w-[160px]">
+        <td class="px-5 py-4 text-slate-600 max-w-[160px]" data-label="Madrasah">
             <div class="truncate"><?= e($r['nama_madrasah']) ?></div>
         </td>
-        <td class="px-5 py-4">
+        <td class="px-5 py-4" data-label="NIP / NPK">
             <div class="text-slate-700"><?= e($r['nip'] ?: '-') ?></div>
             <div class="text-[11px] text-slate-400">NPK: <?= e($r['npk'] ?: '-') ?></div>
         </td>
-        <td class="px-5 py-4 text-slate-600"><?= e($r['pangkat_golongan'] ?: '-') ?></td>
-        <td class="px-5 py-4 text-slate-600"><?= e($r['tmt_kamad'] ?: '-') ?></td>
-        <td class="px-5 py-4">
+        <td class="px-5 py-4 text-slate-600" data-label="Pangkat / Golongan"><?= e($r['pangkat_golongan'] ?: '-') ?></td>
+        <td class="px-5 py-4 text-slate-600" data-label="TMT Kamad"><?= e($r['tmt_kamad'] ?: '-') ?></td>
+        <td class="px-5 py-4" data-label="Status">
             <?php if ($r['status'] === 'aktif'): ?>
                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span>
             <?php else: ?>
                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">Nonaktif</span>
             <?php endif; ?>
         </td>
-        <td class="px-5 py-4 text-right">
-            <div class="flex items-center justify-end space-x-1.5">
+        <td class="px-5 py-4 text-right" data-label="Aksi">
+            <div class="flex items-center justify-end space-x-1.5 table-stack-actions">
                 <button onclick='editK(<?= htmlspecialchars(json_encode($r)) ?>)'
                     class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 transition"
                     title="Edit Kepala Madrasah">
@@ -80,7 +80,7 @@
     <?php endforeach; ?>
     <?php else: ?>
     <tr>
-        <td colspan="7" class="px-5 py-16 text-center">
+        <td colspan="7" class="px-5 py-16 text-center" data-label="">
             <div class="flex flex-col items-center space-y-2 text-slate-400">
                 <i class="fa-solid fa-user-slash text-3xl"></i>
                 <div class="text-sm font-medium">Belum ada data kepala madrasah</div>

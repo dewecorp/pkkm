@@ -51,6 +51,8 @@ $penilaiKpis = [
 view('partials.stat-cards', ['items' => $penilaiKpis]);
 ?>
 
+<?php view('partials.mobile-menu-grid', ['nav' => nav_items()]); ?>
+
 <!-- ── Main Grid: Detail Penugasan & Komponen Progress ─────── -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 

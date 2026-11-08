@@ -80,7 +80,7 @@
 
         <!-- Tabel Butir Indikator -->
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+            <table class="table-stack w-full text-left text-xs">
                 <thead class="bg-white border-b border-slate-100 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                     <tr>
                         <th class="px-6 py-3 w-16">Kode</th>
@@ -103,12 +103,12 @@
                     <tr class="hover:bg-slate-50/70 transition indikator-row"
                         data-search="<?= strtolower($ind['kode_indikator'] . ' ' . $ind['uraian_indikator'] . ' ' . $ind['bukti_autentik'] . $fileSearch) ?>">
                         <!-- Kode -->
-                        <td class="px-6 py-4 align-top">
+                        <td class="px-6 py-4 align-top" data-label="Kode">
                             <span class="font-bold text-brand-600 text-xs"><?= e($ind['kode_indikator']) ?></span>
                         </td>
 
                         <!-- Uraian -->
-                        <td class="px-6 py-4 align-top space-y-1.5">
+                        <td class="px-6 py-4 align-top space-y-1.5" data-label="Uraian Indikator & Bukti Diharapkan">
                             <div class="font-semibold text-slate-800 leading-relaxed"><?= e($ind['uraian_indikator']) ?></div>
                             <div class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100">
                                 <span class="font-semibold text-slate-600">Bukti Autentik:</span> <?= e($ind['bukti_autentik']) ?>
@@ -116,7 +116,7 @@
                         </td>
 
                         <!-- Berkas Terunggah -->
-                        <td class="px-6 py-4 align-top">
+                        <td class="px-6 py-4 align-top" data-label="Berkas Bukti Terunggah">
                             <?php if (!empty($ind['files'])): ?>
                             <div class="space-y-2">
                                 <?php foreach ($ind['files'] as $fIdx => $f): ?>
@@ -186,13 +186,15 @@
 
                         <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
                         <!-- Aksi Upload -->
-                        <td class="px-6 py-4 align-top text-right">
+                        <td class="px-6 py-4 align-top text-right" data-label="Aksi">
+                            <div class="table-stack-actions">
                             <button onclick="openUploadModal(<?= $ind['id'] ?>, '<?= e($ind['kode_indikator']) ?>', '<?= htmlspecialchars(addslashes($ind['uraian_indikator'])) ?>')"
                                 class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 transition shadow-sm"
                                 title="Unggah berkas untuk butir ini">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                                 <span>Upload</span>
                             </button>
+                            </div>
                         </td>
                         <?php endif; ?>
                     </tr>

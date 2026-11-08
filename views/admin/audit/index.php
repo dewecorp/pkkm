@@ -53,7 +53,7 @@
 <!-- ── Table of Audit Logs ─────────────────────────────────── -->
 <div class="card overflow-hidden">
 <div class="overflow-x-auto">
-<table class="w-full text-left text-xs">
+<table class="table-stack w-full text-left text-xs">
     <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase text-[10px] font-semibold tracking-wider">
         <tr>
             <th class="px-6 py-3.5 w-40">Waktu</th>
@@ -83,11 +83,11 @@
             }
         ?>
         <tr class="hover:bg-slate-50/70 transition">
-            <td class="px-6 py-4 text-slate-500 whitespace-nowrap">
+            <td class="px-6 py-4 text-slate-500 whitespace-nowrap" data-label="Waktu">
                 <div class="font-semibold text-slate-700"><?= date('d/m/Y', strtotime($l['created_at'])) ?></div>
                 <div class="text-[11px] text-slate-400"><?= date('H:i:s', strtotime($l['created_at'])) ?> WIB</div>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="Pengguna">
                 <div class="flex items-center space-x-2.5">
                     <div class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs text-white shrink-0" style="background:linear-gradient(135deg,#1e6347,#17503a);">
                         <?= strtoupper(substr($l['nama_lengkap'] ?: ($l['username'] ?: 'S'), 0, 1)) ?>
@@ -98,27 +98,27 @@
                     </div>
                 </div>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="Aksi">
                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold border <?= $actBadge ?>">
                     <?= e($l['action']) ?>
                 </span>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="Kategori">
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600">
                     <?= e($l['kategori']) ?>
                 </span>
             </td>
-            <td class="px-6 py-4 text-slate-700 leading-relaxed max-w-md">
+            <td class="px-6 py-4 text-slate-700 leading-relaxed max-w-md" data-label="Detail Aktivitas">
                 <?= e($l['detail'] ?: '—') ?>
             </td>
-            <td class="px-6 py-4 text-right text-slate-500 font-mono text-[11px] whitespace-nowrap">
+            <td class="px-6 py-4 text-right text-slate-500 font-mono text-[11px] whitespace-nowrap" data-label="IP Address">
                 <?= e($l['ip_address'] ?: '-') ?>
             </td>
         </tr>
         <?php endforeach; ?>
         <?php else: ?>
         <tr>
-            <td colspan="6" class="px-6 py-12 text-center text-slate-400">
+            <td colspan="6" class="px-6 py-12 text-center text-slate-400" data-label="">
                 <i class="fa-solid fa-file-shield text-3xl mb-2 block"></i>
                 Tidak ada data log aktivitas yang cocok dengan pencarian.
             </td>

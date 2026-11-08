@@ -50,6 +50,8 @@ $kamadKpis = [
 view('partials.stat-cards', ['items' => $kamadKpis]);
 ?>
 
+<?php view('partials.mobile-menu-grid', ['nav' => nav_items()]); ?>
+
 <!-- Profile + Info Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 

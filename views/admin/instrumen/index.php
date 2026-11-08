@@ -91,7 +91,7 @@
 
         <!-- Table of Indicators -->
         <div id="tugas-content-<?= $t['id'] ?>" class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+            <table class="table-stack w-full text-left text-xs">
                 <thead class="bg-white border-b border-slate-100 text-slate-400 uppercase text-[10px] font-semibold tracking-wider">
                     <tr>
                         <th class="px-6 py-3 w-20">Kode</th>
@@ -107,23 +107,23 @@
                     <?php foreach ($indikators as $ind): ?>
                     <tr class="hover:bg-slate-50/70 transition indikator-row"
                         data-search="<?= strtolower($ind['kode_indikator'] . ' ' . $ind['uraian_indikator'] . ' ' . $ind['data_kinerja_diharapkan'] . ' ' . $ind['bukti_autentik']) ?>">
-                        <td class="px-6 py-4 align-top">
+                        <td class="px-6 py-4 align-top" data-label="Kode">
                             <span class="font-bold text-brand-600"><?= e($ind['kode_indikator']) ?></span>
                         </td>
-                        <td class="px-6 py-4 align-top">
+                        <td class="px-6 py-4 align-top" data-label="Uraian Indikator Kinerja">
                             <div class="font-semibold text-slate-800 leading-relaxed"><?= e($ind['uraian_indikator']) ?></div>
                         </td>
-                        <td class="px-6 py-4 align-top text-slate-600 leading-relaxed">
+                        <td class="px-6 py-4 align-top text-slate-600 leading-relaxed" data-label="Data Kinerja Diharapkan">
                             <?= e($ind['data_kinerja_diharapkan'] ?: '—') ?>
                         </td>
-                        <td class="px-6 py-4 align-top text-slate-500 leading-relaxed">
+                        <td class="px-6 py-4 align-top text-slate-500 leading-relaxed" data-label="Bukti Autentik">
                             <?= e($ind['bukti_autentik'] ?: '—') ?>
                         </td>
-                        <td class="px-6 py-4 align-top text-center font-bold text-slate-700">
+                        <td class="px-6 py-4 align-top text-center font-bold text-slate-700" data-label="Skor Max">
                             <?= $ind['skor_maksimal'] ?>
                         </td>
-                        <td class="px-6 py-4 align-top text-right">
-                            <div class="flex items-center justify-end space-x-1.5">
+                        <td class="px-6 py-4 align-top text-right" data-label="Aksi">
+                            <div class="flex items-center justify-end space-x-1.5 table-stack-actions">
                                 <button onclick='editIndikator(<?= htmlspecialchars(json_encode($ind)) ?>)'
                                     title="Edit Indikator"
                                     class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 transition">
@@ -140,7 +140,7 @@
                     <?php endforeach; ?>
                     <?php else: ?>
                     <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-slate-400">
+                        <td colspan="6" class="px-6 py-8 text-center text-slate-400" data-label="">
                             Belum ada butir indikator pada tugas utama ini.
                         </td>
                     </tr>

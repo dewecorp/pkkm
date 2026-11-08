@@ -13,7 +13,7 @@
 
 <div class="card overflow-hidden">
 <div class="overflow-x-auto">
-<table class="w-full text-left text-xs">
+<table class="table-stack w-full text-left text-xs">
     <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase text-[10px] font-semibold tracking-wider">
         <tr>
             <th class="px-5 py-3.5">Nama Madrasah</th>
@@ -27,13 +27,13 @@
     <tbody class="divide-y divide-slate-50">
     <?php foreach ($rows as $r): ?>
     <tr class="hover:bg-slate-50 transition group">
-        <td class="px-5 py-4 font-semibold text-slate-800"><?= e($r['nama_madrasah']) ?></td>
-        <td class="px-5 py-4 text-slate-500"><?= e($r['npsn']) ?></td>
-        <td class="px-5 py-4 font-semibold text-slate-700"><?= e($r['status_akreditasi']) ?> (<?= e($r['tahun_akreditasi']) ?>)</td>
-        <td class="px-5 py-4 text-slate-600"><?= e($r['kabupaten_kota']) ?></td>
-        <td class="px-5 py-4 text-slate-600"><?= e($r['provinsi']) ?></td>
-        <td class="px-5 py-4 text-right">
-            <div class="flex items-center justify-end space-x-1.5">
+        <td class="px-5 py-4 font-semibold text-slate-800" data-label="Nama Madrasah"><?= e($r['nama_madrasah']) ?></td>
+        <td class="px-5 py-4 text-slate-500" data-label="NPSN"><?= e($r['npsn']) ?></td>
+        <td class="px-5 py-4 font-semibold text-slate-700" data-label="Akreditasi"><?= e($r['status_akreditasi']) ?> (<?= e($r['tahun_akreditasi']) ?>)</td>
+        <td class="px-5 py-4 text-slate-600" data-label="Kabupaten"><?= e($r['kabupaten_kota']) ?></td>
+        <td class="px-5 py-4 text-slate-600" data-label="Provinsi"><?= e($r['provinsi']) ?></td>
+        <td class="px-5 py-4 text-right" data-label="Aksi">
+            <div class="flex items-center justify-end space-x-1.5 table-stack-actions">
                 <button onclick='editM(<?= htmlspecialchars(json_encode($r)) ?>)' class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 transition" title="Edit Madrasah"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
                 <button onclick="delM(<?= $r['id'] ?>, '<?= e($r['nama_madrasah']) ?>')" class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition" title="Hapus Madrasah"><i class="fa-solid fa-trash text-xs"></i></button>
             </div>

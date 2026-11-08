@@ -2,10 +2,10 @@
 
 <div class="space-y-6">
     <!-- Header Formulir (floating di desktop agar tombol submit selalu terjangkau) -->
-    <div class="card p-4 sm:p-6 sticky top-20 z-20 bg-white/95 border-white/80 shadow-[0_12px_36px_-20px_rgba(11,42,30,0.45)]">
+    <div class="card p-3 sm:p-6 sticky top-[4.25rem] lg:top-20 z-20 bg-white/95 border-white/80 shadow-[0_12px_36px_-20px_rgba(11,42,30,0.45)]">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div class="min-w-0 space-y-2.5">
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-600 text-white shadow-sm">
                         <i class="fa-solid fa-layer-group text-[10px]"></i>
                         <span>Kelompok <?= e($penilaian['kode_kelompok']) ?> &middot; <?= e($penilaian['nama_kelompok']) ?></span>
@@ -19,12 +19,12 @@
                         <span class="truncate max-w-[200px]">Kamad: <?= e($penilaian['nama_kamad']) ?></span>
                     </span>
                 </div>
-                <h2 class="text-base sm:text-lg font-bold text-slate-800 leading-snug"><?= e($penilaian['nama_periode']) ?></h2>
+                <h2 class="hidden sm:block text-base sm:text-lg font-bold text-slate-800 leading-snug"><?= e($penilaian['nama_periode']) ?></h2>
             </div>
 
             <div class="flex flex-row items-center justify-between sm:justify-end gap-2 sm:gap-3 shrink-0">
                 <!-- Progress Counter -->
-                <div class="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 sm:block sm:text-right">
+                <div class="flex items-center justify-between gap-3 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-50 border border-slate-200 sm:block sm:text-right">
                     <span class="text-[11px] text-slate-500 font-medium">Progres Pengisian</span>
                     <div class="text-sm font-bold text-brand-700">
                         <span id="answeredCount"><?= $terisi_count ?></span> / <?= $total_indikator ?>
@@ -52,7 +52,7 @@
                                 <span>Tersimpan</span>
                             </span>
                         <?php endif; ?>
-                        <button onclick="submitPenilaian(<?= $penilaian['id'] ?>)" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-2 whitespace-nowrap">
+                        <button onclick="submitPenilaian(<?= $penilaian['id'] ?>)" class="min-h-[44px] px-4 sm:px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center justify-center gap-2 whitespace-nowrap">
                             <i class="fa-solid fa-paper-plane"></i>
                             <span><?= ($penilaian['status'] === 'submitted') ? 'Simpan / Submit Nilai' : 'Submit Nilai' ?></span>
                         </button>
@@ -82,7 +82,7 @@
             <?php $k = $kData['komponen']; ?>
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                 <!-- Komponen Banner -->
-                <div class="bg-slate-100/80 px-6 py-4 border-b border-slate-200">
+                <div class="bg-slate-100/80 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200">
                     <span class="text-[11px] font-bold text-brand-700 uppercase tracking-wider">Komponen <?= $k['nomor_komponen'] ?></span>
                     <h3 class="text-base font-bold text-slate-800"><?= e($k['nama_komponen']) ?></h3>
                 </div>
@@ -91,7 +91,7 @@
                 <div class="divide-y divide-slate-200">
                     <?php foreach ($kData['tugas'] as $tData): ?>
                         <?php $t = $tData['tugas']; ?>
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             <div class="mb-4">
                                 <span class="px-2 py-0.5 rounded text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200">
                                     Tugas <?= e($t['kode_tugas']) ?>
@@ -102,7 +102,7 @@
                             <!-- List Indikator -->
                             <div class="space-y-6">
                                 <?php foreach ($tData['indikator'] as $ind): ?>
-                                    <div class="bg-slate-50/60 rounded-xl p-5 border border-slate-200 hover:border-slate-300 transition" id="ind-card-<?= $ind['id'] ?>">
+                                    <div class="bg-slate-50/60 rounded-xl p-3.5 sm:p-5 border border-slate-200 hover:border-slate-300 transition" id="ind-card-<?= $ind['id'] ?>">
                                         <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                                             <!-- Kiri: Detail Indikator -->
                                             <div class="space-y-2 flex-1">
@@ -191,7 +191,7 @@
                                                                 <?= ($penilaian['status'] === 'locked') ? 'disabled' : '' ?>
                                                                 onchange="saveScore(<?= $penilaian['id'] ?>, <?= $ind['id'] ?>, <?= $s ?>)"
                                                                 class="peer sr-only">
-                                                            <div class="py-2.5 text-center text-xs font-bold rounded-xl border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 peer-checked:shadow-md peer-checked:ring-2 peer-checked:ring-brand-300 peer-disabled:opacity-60 transition-all flex items-center justify-center space-x-1">
+                                                            <div class="min-h-[44px] py-3 text-center text-xs font-bold rounded-xl border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 peer-checked:shadow-md peer-checked:ring-2 peer-checked:ring-brand-300 peer-disabled:opacity-60 transition-all flex items-center justify-center space-x-1">
                                                                 <span><?= $s ?></span>
                                                                 <i class="fa-solid fa-check text-[10px] hidden peer-checked:inline-block"></i>
                                                             </div>
