@@ -201,7 +201,7 @@
             <?php $roles = \App\Core\Auth::roles(); ?>
             <div class="text-[10px] text-brand-600 font-semibold capitalize"><?= e(implode(', ', $roles)) ?></div>
         </div>
-        <a href="<?= base_url('logout') ?>" class="ml-1 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition" title="Keluar">
+        <a href="<?= base_url('logout') ?>" data-logout class="ml-1 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition" title="Keluar">
             <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
         </a>
     </div>

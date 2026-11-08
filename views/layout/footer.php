@@ -15,6 +15,33 @@ function toggleSidebar() {
     ov.classList.toggle('hidden', !hidden);
 }
 
+// Konfirmasi sebelum logout
+document.addEventListener('click', function (e) {
+    const link = e.target.closest('a[data-logout]');
+    if (!link) return;
+    e.preventDefault();
+
+    const keluar = function () { window.location.href = link.href; };
+
+    if (typeof Swal === 'undefined') {
+        if (window.confirm('Keluar dari aplikasi?')) keluar();
+        return;
+    }
+
+    Swal.fire({
+        title: 'Keluar dari aplikasi?',
+        text: 'Anda akan mengakhiri sesi PKKM ini.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Keluar',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b'
+    }).then(function (hasil) {
+        if (hasil.isConfirmed) keluar();
+    });
+});
+
 // Notifikasi admin & kepala madrasah
 (function () {
     const wrap = document.getElementById('notifWrap');

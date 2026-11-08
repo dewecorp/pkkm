@@ -28,8 +28,9 @@ $items = $items ?? [];
                 <?= $k['value'] ?>
             </span>
             <?php if (!empty($k['badge'])): ?>
+            <?php $badgeWarna = predikat_warna($k['badge']); ?>
             <span class="px-1.5 py-0.5 rounded-md text-[10px] font-bold"
-                  style="background:<?= $k['color'] ?>14;color:<?= $k['color'] ?>;">
+                  style="background:<?= $badgeWarna['bg'] ?>;color:<?= $badgeWarna['fg'] ?>;">
                 <?= e($k['badge']) ?>
             </span>
             <?php endif; ?>

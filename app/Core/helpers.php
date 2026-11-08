@@ -14,6 +14,17 @@ function asset_url(string $path): string {
     return base_url($path) . ($version ? '?v=' . $version : '');
 }
 
+function predikat_warna(?string $predikat): array {
+    $map = [
+        'Amat Baik' => ['bg' => '#ecfdf5', 'fg' => '#059669'],
+        'Baik'      => ['bg' => '#eff6ff', 'fg' => '#2563eb'],
+        'Cukup'     => ['bg' => '#fffbeb', 'fg' => '#d97706'],
+        'Sedang'    => ['bg' => '#faf5ff', 'fg' => '#9333ea'],
+        'Kurang'    => ['bg' => '#fef2f2', 'fg' => '#dc2626'],
+    ];
+    return $map[$predikat ?? ''] ?? ['bg' => '#eef7f1', 'fg' => '#1e6347'];
+}
+
 function notifikasi_kirim_ke_role(array $kodeRole, string $judul, string $pesan, ?string $link = null, ?int $kecualiUserId = null): void {
     try {
         if (empty($kodeRole)) return;

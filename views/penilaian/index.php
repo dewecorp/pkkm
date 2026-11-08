@@ -89,7 +89,9 @@
                         <?= number_format($item['nilai_akhir'], 2) ?>
                     </div>
                     <?php if (!empty($item['predikat'])): ?>
-                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold text-brand-700 bg-brand-50 border border-brand-200">
+                    <?php $pw = predikat_warna($item['predikat']); ?>
+                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold border"
+                          style="background:<?= $pw['bg'] ?>;color:<?= $pw['fg'] ?>;border-color:<?= $pw['fg'] ?>33;">
                         <?= e($item['predikat']) ?>
                     </span>
                     <?php endif; ?>
