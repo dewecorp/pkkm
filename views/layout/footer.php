@@ -126,6 +126,47 @@ document.addEventListener('click', function (e) {
     muat();
     window.setInterval(muat, 60000);
 })();
+
+// Auto redirect ke logout jika pengguna idle lebih dari 2 jam (7200 detik)
+(function () {
+    const IDLE_LIMIT_MS = 2 * 60 * 60 * 1000; // 2 jam = 7.200.000 ms
+    const STORAGE_KEY = 'pkkm_last_active';
+    const logoutUrl = '<?= base_url('logout?reason=timeout') ?>';
+
+    function setAktif() {
+        try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+    }
+
+    function cekIdle() {
+        let last = 0;
+        try { last = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10); } catch (e) {}
+        if (!last) {
+            setAktif();
+            return;
+        }
+        if (Date.now() - last >= IDLE_LIMIT_MS) {
+            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+            window.location.href = logoutUrl;
+        }
+    }
+
+    setAktif();
+    let throttleTimer = null;
+    function onAktivitas() {
+        if (!throttleTimer) {
+            setAktif();
+            throttleTimer = setTimeout(function () { throttleTimer = null; }, 3000);
+        }
+    }
+    ['click', 'keydown', 'scroll', 'touchstart'].forEach(function (ev) {
+        window.addEventListener(ev, onAktivitas, { passive: true });
+    });
+
+    window.setInterval(cekIdle, 30000); // periksa tiap 30 detik
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) cekIdle();
+    });
+})();
 </script>
 </body>
 </html>

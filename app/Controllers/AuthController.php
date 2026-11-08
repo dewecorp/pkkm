@@ -9,7 +9,9 @@ class AuthController {
         if (Auth::check()) {
             $this->redirectBasedOnRole();
         }
-        view('auth.login');
+        $expired = !empty($_GET['expired']) || !empty($_SESSION['session_expired']);
+        unset($_SESSION['session_expired']);
+        view('auth.login', ['sessionExpired' => $expired]);
     }
 
     public function login() {
@@ -60,11 +62,18 @@ class AuthController {
     }
 
     public function logout() {
-        if (Auth::check()) {
-            audit_log('LOGOUT', 'auth', "Pengguna " . Auth::user()['username'] . " logout");
-            Auth::logout();
+        $reason = $_GET['reason'] ?? '';
+        $user = Auth::check() ? Auth::user()['username'] : null;
+        if ($user) {
+            if ($reason === 'timeout') {
+                audit_log('LOGOUT_TIMEOUT', 'auth', "Pengguna {$user} logout otomatis karena idle lebih dari 2 jam");
+            } else {
+                audit_log('LOGOUT', 'auth', "Pengguna {$user} logout");
+            }
         }
-        header('Location: ' . base_url('login'));
+        Auth::logout();
+        $target = base_url('login') . ($reason === 'timeout' ? '?expired=1' : '');
+        header('Location: ' . $target);
         exit;
     }
 

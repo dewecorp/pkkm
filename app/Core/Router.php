@@ -45,6 +45,16 @@ class Router {
                 // Role verification
                 if (!empty($route['roles'])) {
                     if (!Auth::check()) {
+                        if ($this->isAjaxRequest()) {
+                            http_response_code(401);
+                            header('Content-Type: application/json; charset=utf-8');
+                            echo json_encode([
+                                'success' => false,
+                                'message' => 'Sesi Anda telah berakhir. Silakan login kembali.',
+                                'redirect' => base_url('login')
+                            ]);
+                            exit;
+                        }
                         header('Location: ' . base_url('login'));
                         exit;
                     }
@@ -76,5 +86,11 @@ class Router {
             $controller = new $class();
             return call_user_func_array([$controller, $method], $indexedParams);
         }
+    }
+
+    private function isAjaxRequest(): bool {
+        $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+        $xReq = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
+        return strtolower($xReq) === 'xmlhttprequest' || strpos($accept, 'application/json') !== false;
     }
 }

@@ -2,8 +2,28 @@
 namespace App\Core;
 
 class Auth {
+    // Batas waktu idle (detik): 2 jam = 7200 detik
+    public const IDLE_TIMEOUT = 7200;
+
     public static function check(): bool {
-        return isset($_SESSION['user_id']);
+        if (!isset($_SESSION['user_id'])) {
+            return false;
+        }
+
+        // Cek idle timeout (2 jam tanpa aktivitas)
+        $now = time();
+        $lastActivity = $_SESSION['last_activity'] ?? null;
+        if ($lastActivity !== null && ($now - $lastActivity) > self::IDLE_TIMEOUT) {
+            $username = $_SESSION['user']['username'] ?? 'unknown';
+            audit_log('LOGOUT_TIMEOUT', 'auth', "Sesi pengguna {$username} kedaluwarsa karena idle lebih dari 2 jam");
+            self::logout();
+            $_SESSION['session_expired'] = true;
+            return false;
+        }
+
+        // Perbarui timestamp aktivitas terakhir
+        $_SESSION['last_activity'] = $now;
+        return true;
     }
 
     public static function user(): ?array {
@@ -32,6 +52,8 @@ class Auth {
         $_SESSION['user'] = $user;
         $_SESSION['roles'] = $roles;
         $_SESSION['created_time'] = time();
+        $_SESSION['last_activity'] = time();
+        unset($_SESSION['session_expired']);
     }
 
     public static function logout(): void {

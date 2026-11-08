@@ -203,6 +203,16 @@ $loginDesc = get_setting('login_desc', 'Sistem informasi untuk mendukung penilai
                 </div>
             </div>
 
+            <?php if (!empty($sessionExpired)): ?>
+            <!-- Alert Session Expired / Idle 2 Jam -->
+            <div class="mt-3.5 p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2.5 text-amber-900 text-xs">
+                <i class="fa-solid fa-clock-rotate-left text-amber-600 mt-0.5 shrink-0"></i>
+                <div class="leading-relaxed">
+                    Sesi Anda Berakhir. Silakan login kembali untuk melanjutkan.
+                </div>
+            </div>
+            <?php endif; ?>
+
             <!-- Login Form -->
             <form id="loginForm" class="space-y-3.5 mt-4" autocomplete="off">
                 <?= csrf_field() ?>
