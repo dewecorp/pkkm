@@ -6,7 +6,7 @@
         <h1 class="text-xl font-bold text-slate-800 tracking-tight">Pengguna & Penilai</h1>
         <p class="text-sm text-slate-500 mt-0.5">Kelola akun pengguna sistem dan penugasan kelompok penilai</p>
     </div>
-    <button onclick="openAdd()" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow" style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+    <button onclick="openAdd()" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow" style="background:linear-gradient(135deg,#1e6347,#17503a);">
         <i class="fa-solid fa-user-plus"></i><span>Tambah Pengguna</span>
     </button>
 </div>
@@ -29,7 +29,7 @@
     <tr class="hover:bg-slate-50 transition group">
         <td class="px-5 py-4">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs text-white shrink-0" style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs text-white shrink-0" style="background:linear-gradient(135deg,#1e6347,#17503a);">
                     <?= strtoupper(substr($r['nama_lengkap'],0,1)) ?>
                 </div>
                 <div>
@@ -174,7 +174,7 @@
 
         <div class="flex justify-end space-x-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50 shrink-0">
             <button type="button" onclick="closePg()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
-            <button type="submit" id="btnPgSave" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white transition" style="background:linear-gradient(135deg,#6366f1,#4338ca);">Simpan Pengguna</button>
+            <button type="submit" id="btnPgSave" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white transition" style="background:linear-gradient(135deg,#1e6347,#17503a);">Simpan Pengguna</button>
         </div>
     </form>
 </div>
@@ -257,7 +257,7 @@ async function resetPwd(id, nama) {
         input: 'password',
         inputPlaceholder: 'Password baru (min. 6 karakter)',
         showCancelButton: true,
-        confirmButtonColor: '#6366f1',
+        confirmButtonColor: '#1e6347',
         cancelButtonText: 'Batal',
         confirmButtonText: 'Simpan',
         inputValidator: v => !v ? 'Wajib diisi!' : (v.length < 6 ? 'Minimal 6 karakter!' : null)

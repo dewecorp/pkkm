@@ -10,6 +10,8 @@
     </div>
 </div>
 
+<?php view('partials.panduan-skor'); ?>
+
 <!-- ── List Lembar Penilaian ───────────────────────────────── -->
 <?php if (!empty($list)): ?>
 <div class="space-y-4">
@@ -22,14 +24,14 @@
     ?>
     <div class="card card-hover overflow-hidden p-0">
         <!-- Status Bar -->
-        <div class="h-1 w-full" style="background:<?= $isDone ? 'linear-gradient(90deg,#059669,#10b981)' : 'linear-gradient(90deg,#6366f1,#818cf8)' ?>;"></div>
+        <div class="h-1 w-full" style="background:<?= $isDone ? 'linear-gradient(90deg,#059669,#10b981)' : 'linear-gradient(90deg,#1e6347,#4c9d75)' ?>;"></div>
 
         <div class="p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <!-- Left: Info -->
             <div class="space-y-3 flex-1">
                 <div class="flex flex-wrap items-center gap-2">
                     <span class="px-2.5 py-1 rounded-lg text-xs font-bold text-white shadow-sm"
-                          style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                          style="background:linear-gradient(135deg,#1e6347,#17503a);">
                         <?= e($item['kode_kelompok']) ?> — <?= e($item['nama_kelompok']) ?>
                     </span>
                     <span class="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-600 bg-slate-100">
@@ -73,7 +75,7 @@
                     </div>
                     <div class="h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <div class="h-1.5 rounded-full transition-all duration-500"
-                             style="width:<?= $pct ?>%; background:<?= $isDone ? '#10b981' : '#6366f1' ?>;"></div>
+                             style="width:<?= $pct ?>%; background:<?= $isDone ? '#10b981' : '#1e6347' ?>;"></div>
                     </div>
                 </div>
             </div>
@@ -96,7 +98,7 @@
 
                 <a href="<?= base_url('penilaian/form/' . $item['id']) ?>"
                    class="inline-flex items-center space-x-2 px-5 py-3 rounded-xl text-xs font-bold text-white shadow transition"
-                   style="background:<?= ($item['status'] === 'locked') ? 'linear-gradient(135deg,#475569,#334155)' : 'linear-gradient(135deg,#6366f1,#4338ca)' ?>;">
+                   style="background:<?= ($item['status'] === 'locked') ? 'linear-gradient(135deg,#475569,#334155)' : 'linear-gradient(135deg,#1e6347,#17503a)' ?>;">
                     <i class="fa-solid <?= ($item['status'] === 'locked') ? 'fa-eye' : 'fa-pen-to-square' ?>"></i>
                     <span><?= ($item['status'] === 'locked') ? 'Lihat Lembar Nilai' : ($item['status'] === 'submitted' ? 'Lanjutkan / Ubah Nilai' : 'Buka & Isi Formulir') ?></span>
                 </a>

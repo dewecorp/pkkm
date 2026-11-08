@@ -37,7 +37,7 @@
                 <?php endforeach; ?>
             </select>
 
-            <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-white shadow" style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+            <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-white shadow" style="background:linear-gradient(135deg,#1e6347,#17503a);">
                 Filter
             </button>
 
@@ -89,7 +89,7 @@
             </td>
             <td class="px-6 py-4">
                 <div class="flex items-center space-x-2.5">
-                    <div class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs text-white shrink-0" style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs text-white shrink-0" style="background:linear-gradient(135deg,#1e6347,#17503a);">
                         <?= strtoupper(substr($l['nama_lengkap'] ?: ($l['username'] ?: 'S'), 0, 1)) ?>
                     </div>
                     <div>

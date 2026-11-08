@@ -3,7 +3,7 @@
 <div class="space-y-6">
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h2 class="text-xl font-bold text-navy-800">Rekapitulasi Nilai & Laporan PKKM</h2>
+            <h2 class="text-xl font-bold text-slate-800">Rekapitulasi Nilai & Laporan PKKM</h2>
             <p class="text-xs text-slate-500 mt-1">Hasil kumulatif penilaian kinerja kepala madrasah empat tahunan</p>
         </div>
         <div class="flex items-center space-x-3">
@@ -21,7 +21,7 @@
     <!-- Rincian Identitas -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
         <div>
-            <h4 class="font-bold text-navy-800 uppercase tracking-wider mb-2 border-b pb-1">Data Madrasah</h4>
+            <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2 border-b pb-1">Data Madrasah</h4>
             <div class="space-y-1 text-slate-600">
                 <div>Nama Madrasah: <strong class="text-slate-800"><?= e($periode['nama_madrasah']) ?></strong></div>
                 <div>NPSN / NSM: <?= e($periode['npsn']) ?> / <?= e($periode['nsm']) ?></div>
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div>
-            <h4 class="font-bold text-navy-800 uppercase tracking-wider mb-2 border-b pb-1">Data Kepala Madrasah</h4>
+            <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2 border-b pb-1">Data Kepala Madrasah</h4>
             <div class="space-y-1 text-slate-600">
                 <div>Nama Kepala Madrasah: <strong class="text-slate-800"><?= e($periode['nama_kamad']) ?></strong></div>
                 <div>NIP / NPK: <?= e($periode['kamad_nip']) ?> / <?= e($periode['kamad_npk']) ?></div>
@@ -43,7 +43,7 @@
     <!-- Tabel Rekapitulasi Sesuai Excel -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-200">
-            <h3 class="font-bold text-navy-800 text-sm">Tabel Pembobotan Nilai 6 Kelompok Penilai</h3>
+            <h3 class="font-bold text-slate-800 text-sm">Tabel Pembobotan Nilai 6 Kelompok Penilai</h3>
             <p class="text-xs text-slate-500">Rumus: NKTE = (4×KS + 2×KY + PM + GR + TK + KM) / 10</p>
         </div>
 
@@ -76,7 +76,7 @@
                     ?>
                         <tr class="hover:bg-slate-50">
                             <td class="px-6 py-4 text-center text-slate-500 font-medium"><?= $g['no'] ?>.</td>
-                            <td class="px-6 py-4 font-bold text-navy-800"><?= $g['nama'] ?></td>
+                            <td class="px-6 py-4 font-bold text-slate-800"><?= $g['nama'] ?></td>
                             <td class="px-6 py-4 text-center font-semibold text-slate-700"><?= $g['bobot'] ?></td>
                             <td class="px-6 py-4 text-center">
                                 <?php if ($grpData && $grpData['is_lengkap']): ?>
@@ -86,14 +86,14 @@
                                 <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 text-right font-semibold text-slate-800"><?= number_format($avg, 2) ?></td>
-                            <td class="px-6 py-4 text-right font-bold text-navy-800"><?= number_format($weighted, 2) ?></td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-800"><?= number_format($weighted, 2) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
                 <tfoot class="bg-slate-100 font-bold border-t-2 border-slate-300">
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-right uppercase text-navy-900">Hasil Penilaian Empat Tahunan (NKTE):</td>
-                        <td class="px-6 py-4 text-right text-base text-navy-900"><?= number_format($rekap['nkte'], 2) ?></td>
+                        <td colspan="5" class="px-6 py-4 text-right uppercase text-slate-900">Hasil Penilaian Empat Tahunan (NKTE):</td>
+                        <td class="px-6 py-4 text-right text-base text-slate-900"><?= number_format($rekap['nkte'], 2) ?></td>
                     </tr>
                     <tr>
                         <td colspan="5" class="px-6 py-3 text-right uppercase text-slate-700">Predikat Penilaian Kinerja:</td>

@@ -104,7 +104,7 @@
                 <button type="submit" 
                         id="btnSave" 
                         class="px-6 py-2.5 rounded-xl text-xs font-bold text-white shadow-sm transition flex items-center space-x-2"
-                        style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                        style="background:linear-gradient(135deg,#1e6347,#17503a);">
                     <i class="fa-solid fa-floppy-disk"></i>
                     <span>Simpan Pengaturan</span>
                 </button>

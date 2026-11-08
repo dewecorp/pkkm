@@ -28,7 +28,7 @@
     <header class="bg-slate-950/90 backdrop-blur border-b border-slate-800 px-4 py-3 sticky top-0 z-30 flex items-center justify-between flex-wrap gap-3">
         <!-- Title & Metadata -->
         <div class="flex items-center space-x-3 min-w-0">
-            <span class="px-2 py-1 rounded bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold text-xs uppercase tracking-wider">
+            <span class="px-2 py-1 rounded bg-brand-600/30 border border-brand-500/40 text-brand-300 font-bold text-xs uppercase tracking-wider">
                 <?= e($bukti['file_ext']) ?>
             </span>
             <div class="min-w-0">
@@ -87,7 +87,7 @@
             <!-- PDF Viewer with PDF.js (In-Memory Base64 - 100% Zero HTTP Fetch, Immune to IDM) -->
             <div id="pdfViewerContainer" class="flex flex-col items-center justify-center w-full max-w-5xl py-4 space-y-4">
                 <div id="loadingIndicator" class="text-center py-12">
-                    <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-500 mb-3 block"></i>
+                    <i class="fa-solid fa-circle-notch fa-spin text-3xl text-brand-500 mb-3 block"></i>
                     <p class="text-xs text-slate-400">Merender dokumen PDF...</p>
                 </div>
                 <div id="canvasWrapper" class="hidden shadow-2xl rounded-lg overflow-hidden border border-slate-800 bg-white">
@@ -215,7 +215,7 @@
         <?php else: ?>
             <!-- Office Document / Other Format Info Card -->
             <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-8 max-w-md text-center shadow-2xl">
-                <div class="w-16 h-16 rounded-2xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-indigo-500/30">
+                <div class="w-16 h-16 rounded-2xl bg-brand-600/20 text-brand-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-brand-500/30">
                     <i class="fa-solid fa-file-lines"></i>
                 </div>
                 <h3 class="text-base font-bold text-white mb-1"><?= e($bukti['nama_dokumen']) ?></h3>
@@ -223,7 +223,7 @@
                     Format berkas <b>.<?= e($bukti['file_ext']) ?></b> tidak mendukung pratinjau canvas langsung. Anda dapat mengunduh berkas ini.
                 </p>
                 <button onclick="downloadFromMemory()"
-                   class="inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-xl font-bold text-xs text-white bg-indigo-600 hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/30">
+                   class="inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-xl font-bold text-xs text-white bg-brand-600 hover:bg-brand-500 transition shadow-lg shadow-brand-600/30">
                     <i class="fa-solid fa-download"></i>
                     <span>Unduh Berkas Sekarang</span>
                 </button>

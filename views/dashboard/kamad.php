@@ -10,11 +10,45 @@
     </div>
     <a href="<?= base_url('bukti') ?>"
        class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow transition"
-       style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+       style="background:linear-gradient(135deg,#1e6347,#17503a);">
         <i class="fa-solid fa-cloud-arrow-up"></i>
         <span>Unggah Bukti Kinerja</span>
     </a>
 </div>
+
+<!-- ── KPI Cards Ringkasan ─────────────────────────────────── -->
+<?php
+$totalPenilai = 0;
+$selesaiPenilai = 0;
+if (!empty($rekap['groups'])) {
+    foreach ($rekap['groups'] as $grp) {
+        $totalPenilai += (int)($grp['total_penilai'] ?? 0);
+        $selesaiPenilai += (int)($grp['penilai_selesai'] ?? 0);
+    }
+}
+$pctKelengkapan = $totalPenilai > 0 ? round(($selesaiPenilai / $totalPenilai) * 100) : 0;
+$nkteValue = (!empty($rekap['nkte']) && $rekap['nkte'] > 0) ? number_format($rekap['nkte'], 2) : '—';
+
+$kamadKpis = [
+    ['label'=>'Status Periode',
+     'value'=>$periode ? ucfirst($periode['status']) : 'Belum Ada',
+     'icon'=>'fa-calendar-check', 'color'=>'#1e6347', 'grad'=>'linear-gradient(135deg,#4c9d75,#1a573f)',
+     'badge'=>$periode ? 'TA '.$periode['tahun_penilaian'] : '', 'small'=>true],
+    ['label'=>'Skor NKTE', 'value'=>$nkteValue,
+     'icon'=>'fa-chart-line', 'color'=>'#0d9488', 'grad'=>'linear-gradient(135deg,#2dd4bf,#0f766e)',
+     'badge'=>$nkteValue !== '—' ? ($rekap['predikat'] ?? '') : '', 'small'=>false],
+    ['label'=>'Progres Penilaian', 'value'=>$selesaiPenilai.' / '.$totalPenilai,
+     'icon'=>'fa-list-check', 'color'=>'#f59e0b', 'grad'=>'linear-gradient(135deg,#fbbf24,#d97706)',
+     'badge'=>$pctKelengkapan.'%', 'small'=>false],
+    ['label'=>'Publikasi Hasil',
+     'value'=>$is_published ? 'Dipublikasikan' : 'Menunggu',
+     'icon'=>'fa-bullhorn',
+     'color'=>$is_published ? '#10b981' : '#f59e0b',
+     'grad'=>$is_published ? 'linear-gradient(135deg,#34d399,#059669)' : 'linear-gradient(135deg,#fbbf24,#d97706)',
+     'badge'=>'', 'small'=>true],
+];
+view('partials.stat-cards', ['items' => $kamadKpis]);
+?>
 
 <!-- Profile + Info Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -22,7 +56,7 @@
     <!-- Profil Card -->
     <div class="card p-6 flex flex-col items-center text-center space-y-3">
         <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black text-white shadow"
-             style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+             style="background:linear-gradient(135deg,#1e6347,#17503a);">
             <?= strtoupper(substr($kamad['nama_lengkap']??'K',0,1)) ?>
         </div>
         <div>
@@ -95,14 +129,14 @@
 <?php if ($is_published && $rekap): ?>
 <?php
 $predColor = ['Amat Baik'=>'#059669','Baik'=>'#2563eb','Cukup'=>'#d97706','Sedang'=>'#9333ea','Kurang'=>'#dc2626'];
-$pColor = $predColor[$rekap['predikat']] ?? '#6366f1';
+$pColor = $predColor[$rekap['predikat']] ?? '#1e6347';
 ?>
 <div class="card overflow-hidden">
-    <div class="h-1" style="background:linear-gradient(90deg,#6366f1,#4338ca,#7c3aed);"></div>
+    <div class="h-1" style="background:linear-gradient(90deg,#1e6347,#17503a,#0f766e);"></div>
     <div class="p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
             <div class="text-[11px] font-bold uppercase tracking-wider text-brand-600 mb-1">Hasil Resmi Penilaian Kinerja (NKTE)</div>
-            <div class="text-5xl font-black" style="background:linear-gradient(135deg,#6366f1,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+            <div class="text-5xl font-black" style="background:linear-gradient(135deg,#1e6347,#17503a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
                 <?= number_format($rekap['nkte'],2) ?>
             </div>
             <div class="text-xs text-slate-400 mt-1">dari skala 100</div>

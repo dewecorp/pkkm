@@ -20,7 +20,7 @@ $pct = $totalInd > 0 ? round(($terisiInd / $totalInd) * 100) : 0;
     <div class="flex items-center space-x-2">
         <a href="<?= base_url('penilai/penilaian') ?>"
            class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white shadow transition"
-           style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+           style="background:linear-gradient(135deg,#1e6347,#17503a);">
             <i class="fa-solid fa-pen-to-square"></i>
             <span>Buka Form Penilaian</span>
         </a>
@@ -31,62 +31,25 @@ $pct = $totalInd > 0 ? round(($terisiInd / $totalInd) * 100) : 0;
 <?php if ($a): ?>
 
 <!-- ── KPI Cards Ringkasan ─────────────────────────────────── -->
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-    <!-- Status Card -->
-    <div class="card p-5">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
-             style="background:<?= $isDone ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)' ?>;">
-            <i class="fa-solid <?= $isDone ? 'fa-lock text-emerald-600' : 'fa-hourglass-half text-amber-600' ?> text-sm"></i>
-        </div>
-        <div class="text-xs text-slate-400 font-medium">Status Pengisian</div>
-        <div class="text-base font-black text-slate-800 mt-1">
-            <?= $isDone ? 'Telah Disubmit' : 'Sedang Berjalan' ?>
-        </div>
-        <div class="text-[11px] font-semibold mt-1 <?= $isDone ? 'text-emerald-600' : 'text-amber-600' ?>">
-            <?= $isDone ? 'Nilai Terkunci' : 'Menunggu Kelengkapan' ?>
-        </div>
-    </div>
-
-    <!-- Progres Indikator Card -->
-    <div class="card p-5">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-brand-50 text-brand-600">
-            <i class="fa-solid fa-list-check text-sm"></i>
-        </div>
-        <div class="text-xs text-slate-400 font-medium">Progres Indikator</div>
-        <div class="text-2xl font-black text-slate-800 leading-none mt-1">
-            <?= $terisiInd ?> <span class="text-sm font-medium text-slate-400">/ <?= $totalInd ?></span>
-        </div>
-        <div class="text-[11px] font-bold text-brand-600 mt-1.5"><?= $pct ?>% Selesai Diisi</div>
-    </div>
-
-    <!-- Nilai Konversi Card -->
-    <div class="card p-5">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-emerald-50 text-emerald-600">
-            <i class="fa-solid fa-calculator text-sm"></i>
-        </div>
-        <div class="text-xs text-slate-400 font-medium">Nilai Akhir (Skala 100)</div>
-        <div class="text-2xl font-black text-slate-800 leading-none mt-1">
-            <?= $a['nilai_akhir'] !== null ? number_format($a['nilai_akhir'], 2) : '—' ?>
-        </div>
-        <div class="text-[11px] font-bold text-emerald-600 mt-1.5">
-            <?= e($a['predikat'] ?? 'Belum Dihitung') ?>
-        </div>
-    </div>
-
-    <!-- Peran / Kelompok Card -->
-    <div class="card p-5">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-blue-50 text-blue-600">
-            <i class="fa-solid fa-user-shield text-sm"></i>
-        </div>
-        <div class="text-xs text-slate-400 font-medium">Kelompok & Bobot</div>
-        <div class="text-base font-black text-slate-800 mt-1">
-            <?= e($a['kode_kelompok']) ?>
-        </div>
-        <div class="text-[11px] text-slate-500 font-semibold mt-1">
-            Bobot NKTE: <?= (int)$a['bobot_default'] ?>
-        </div>
-    </div>
-</div>
+<?php
+$statusColor = $isDone ? '#10b981' : '#f59e0b';
+$statusGrad  = $isDone ? 'linear-gradient(135deg,#34d399,#059669)' : 'linear-gradient(135deg,#fbbf24,#d97706)';
+$penilaiKpis = [
+    ['label'=>'Status Pengisian', 'value'=>$isDone ? 'Telah Disubmit' : 'Sedang Berjalan',
+     'icon'=>$isDone ? 'fa-lock' : 'fa-hourglass-half', 'color'=>$statusColor, 'grad'=>$statusGrad,
+     'badge'=>'', 'small'=>true],
+    ['label'=>'Progres Indikator', 'value'=>$terisiInd.' / '.$totalInd,
+     'icon'=>'fa-list-check', 'color'=>'#1e6347', 'grad'=>'linear-gradient(135deg,#4c9d75,#1a573f)',
+     'badge'=>$pct.'%', 'small'=>false],
+    ['label'=>'Nilai Akhir', 'value'=>$a['nilai_akhir'] !== null ? number_format($a['nilai_akhir'], 2) : '—',
+     'icon'=>'fa-calculator', 'color'=>'#0d9488', 'grad'=>'linear-gradient(135deg,#2dd4bf,#0f766e)',
+     'badge'=>$a['nilai_akhir'] !== null ? ($a['predikat'] ?? 'Belum final') : '', 'small'=>false],
+    ['label'=>'Kelompok & Bobot', 'value'=>e($a['kode_kelompok']),
+     'icon'=>'fa-user-shield', 'color'=>'#2b7d55', 'grad'=>'linear-gradient(135deg,#4c9d75,#1e6347)',
+     'badge'=>'Bobot '.(int)$a['bobot_default'], 'small'=>false],
+];
+view('partials.stat-cards', ['items' => $penilaiKpis]);
+?>
 
 <!-- ── Main Grid: Detail Penugasan & Komponen Progress ─────── -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -150,7 +113,7 @@ $pct = $totalInd > 0 ? round(($terisiInd / $totalInd) * 100) : 0;
             </div>
             <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
                 <div class="h-2 rounded-full transition-all duration-500"
-                     style="width:<?= $pct ?>%; background:linear-gradient(90deg,#6366f1,#4f46e5);"></div>
+                     style="width:<?= $pct ?>%; background:linear-gradient(90deg,#1e6347,#1a573f);"></div>
             </div>
         </div>
 
@@ -158,7 +121,7 @@ $pct = $totalInd > 0 ? round(($terisiInd / $totalInd) * 100) : 0;
         <div class="pt-2">
             <a href="<?= base_url('penilaian/form/' . $a['penilaian_id']) ?>"
                class="w-full py-3 rounded-xl text-xs font-bold text-white flex items-center justify-center space-x-2 transition shadow"
-               style="background:<?= $isDone ? 'linear-gradient(135deg,#475569,#334155)' : 'linear-gradient(135deg,#6366f1,#4338ca)' ?>;">
+               style="background:<?= $isDone ? 'linear-gradient(135deg,#475569,#334155)' : 'linear-gradient(135deg,#1e6347,#17503a)' ?>;">
                 <i class="fa-solid <?= $isDone ? 'fa-eye' : 'fa-pen-to-square' ?>"></i>
                 <span><?= $isDone ? 'Lihat Lembar Nilai' : 'Lanjutkan Penilaian' ?></span>
             </a>
@@ -215,7 +178,7 @@ $pct = $totalInd > 0 ? round(($terisiInd / $totalInd) * 100) : 0;
                 <!-- Progress bar -->
                 <div class="h-1.5 rounded-full bg-slate-200/70 overflow-hidden">
                     <div class="h-1.5 rounded-full transition-all duration-500"
-                         style="width:<?= $kPct ?>%; background:<?= $kLengkap ? '#10b981' : '#6366f1' ?>;"></div>
+                         style="width:<?= $kPct ?>%; background:<?= $kLengkap ? '#10b981' : '#1e6347' ?>;"></div>
                 </div>
             </div>
             <?php endforeach; ?>

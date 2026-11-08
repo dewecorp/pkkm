@@ -251,7 +251,7 @@
                     </div>
                     <button type="button" onclick="addUploadRow()"
                         class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white shadow transition"
-                        style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                        style="background:linear-gradient(135deg,#1e6347,#17503a);">
                         <i class="fa-solid fa-plus text-[10px]"></i>
                         <span>Tambah Berkas</span>
                     </button>
@@ -270,7 +270,7 @@
             <div class="flex space-x-2">
                 <button type="button" onclick="closeUploadModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
                 <button type="submit" id="btnUploadSubmit" class="px-5 py-2 rounded-xl text-xs font-bold text-white transition flex items-center space-x-1.5"
-                    style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                    style="background:linear-gradient(135deg,#1e6347,#17503a);">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
                     <span>Unggah Semua Berkas</span>
                 </button>

@@ -10,7 +10,7 @@
     </div>
     <button onclick="openAdd()"
         class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow"
-        style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+        style="background:linear-gradient(135deg,#1e6347,#17503a);">
         <i class="fa-solid fa-plus"></i><span>Tambah Kepala Madrasah</span>
     </button>
 </div>
@@ -37,7 +37,7 @@
         <td class="px-5 py-4">
             <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm text-white shrink-0"
-                     style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                     style="background:linear-gradient(135deg,#1e6347,#17503a);">
                     <?= strtoupper(substr($r['nama_lengkap'], 0, 1)) ?>
                 </div>
                 <div>
@@ -244,7 +244,7 @@
             </button>
             <button type="submit" id="kSave"
                 class="px-6 py-2.5 rounded-xl text-sm font-bold text-white transition"
-                style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+                style="background:linear-gradient(135deg,#1e6347,#17503a);">
                 Simpan
             </button>
         </div>

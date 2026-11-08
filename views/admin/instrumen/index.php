@@ -27,7 +27,7 @@
             </select>
         </form>
 
-        <button onclick="openAddIndikator()" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold text-white shadow" style="background:linear-gradient(135deg,#6366f1,#4338ca);">
+        <button onclick="openAddIndikator()" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold text-white shadow" style="background:linear-gradient(135deg,#1e6347,#17503a);">
             <i class="fa-solid fa-plus"></i><span>Tambah Indikator</span>
         </button>
     </div>
@@ -205,7 +205,7 @@
         <div class="flex justify-end space-x-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50 shrink-0">
             <button type="button" onclick="closeEditInd()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
             <button type="submit" id="btnEditIndSave" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white transition"
-                style="background:linear-gradient(135deg,#6366f1,#4338ca);">Simpan Perubahan</button>
+                style="background:linear-gradient(135deg,#1e6347,#17503a);">Simpan Perubahan</button>
         </div>
     </form>
 </div>
@@ -276,7 +276,7 @@
         <div class="flex justify-end space-x-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50 shrink-0">
             <button type="button" onclick="closeAddInd()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
             <button type="submit" id="btnAddIndSave" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white transition"
-                style="background:linear-gradient(135deg,#6366f1,#4338ca);">Simpan Indikator</button>
+                style="background:linear-gradient(135deg,#1e6347,#17503a);">Simpan Indikator</button>
         </div>
     </form>
 </div>

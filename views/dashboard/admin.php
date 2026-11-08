@@ -3,8 +3,8 @@
 <?php
 // Summary stat per kelompok
 $groupDefs = [
-    'KS'     => ['label'=>'Kepala Seksi',    'bobot'=>4, 'icon'=>'fa-user-shield',  'color'=>'#6366f1','bg'=>'rgba(99,102,241,0.10)'],
-    'KY'     => ['label'=>'Ketua Yayasan',   'bobot'=>2, 'icon'=>'fa-building',     'color'=>'#8b5cf6','bg'=>'rgba(139,92,246,0.10)'],
+    'KS'     => ['label'=>'Kepala Seksi',    'bobot'=>4, 'icon'=>'fa-user-shield',  'color'=>'#1e6347','bg'=>'rgba(30,99,71,0.10)'],
+    'KY'     => ['label'=>'Ketua Yayasan',   'bobot'=>2, 'icon'=>'fa-building',     'color'=>'#0d9488','bg'=>'rgba(13,148,136,0.10)'],
     'WASMAD' => ['label'=>'Pengawas',        'bobot'=>1, 'icon'=>'fa-binoculars',   'color'=>'#06b6d4','bg'=>'rgba(6,182,212,0.10)'],
     'GURU'   => ['label'=>'Guru',            'bobot'=>1, 'icon'=>'fa-chalkboard-user','color'=>'#10b981','bg'=>'rgba(16,185,129,0.10)'],
     'TENDIK' => ['label'=>'Tenaga Kependidikan','bobot'=>1,'icon'=>'fa-id-card',    'color'=>'#f59e0b','bg'=>'rgba(245,158,11,0.10)'],
@@ -35,7 +35,7 @@ $groupDefs = [
 $predikat = ($rekap && $rekap['nkte'] > 0) ? ($rekap['predikat'] ?? '') : '';
 $kpis = [
     ['label'=>'Total Pengguna',    'value'=>$stats['total_users'],
-     'icon'=>'fa-users',           'color'=>'#6366f1','grad'=>'linear-gradient(135deg,#818cf8,#4f46e5)','badge'=>''],
+     'icon'=>'fa-users',           'color'=>'#1e6347','grad'=>'linear-gradient(135deg,#4c9d75,#1a573f)','badge'=>''],
     ['label'=>'Periode Penilaian', 'value'=>$stats['total_periode'],
      'icon'=>'fa-calendar-check',  'color'=>'#10b981','grad'=>'linear-gradient(135deg,#34d399,#059669)','badge'=>''],
     ['label'=>'Penilai Aktif',     'value'=>$stats['total_penilai'],
@@ -46,36 +46,7 @@ $kpis = [
      'badge'=>$predikat],
 ];
 ?>
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-    <?php foreach ($kpis as $k): ?>
-    <div class="group relative rounded-xl bg-white border border-slate-100 p-4 sm:p-5
-                shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200
-                hover:-translate-y-0.5 hover:shadow-md hover:border-slate-200">
-
-        <!-- Label -->
-        <div class="text-[10px] sm:text-xs font-medium text-slate-500 leading-tight pr-10 sm:pr-11 whitespace-nowrap"><?= e($k['label']) ?></div>
-
-        <!-- Icon -->
-        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center text-white"
-             style="background:<?= $k['grad'] ?>;box-shadow:0 4px 10px -4px <?= $k['color'] ?>99;">
-            <i class="fa-solid <?= $k['icon'] ?> text-xs sm:text-sm"></i>
-        </div>
-
-        <!-- Value + badge -->
-        <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
-            <span class="text-[22px] sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-none tabular-nums">
-                <?= $k['value'] ?>
-            </span>
-            <?php if ($k['badge']): ?>
-            <span class="px-1.5 py-0.5 rounded-md text-[10px] font-bold"
-                  style="background:<?= $k['color'] ?>14;color:<?= $k['color'] ?>;">
-                <?= e($k['badge']) ?>
-            </span>
-            <?php endif; ?>
-        </div>
-    </div>
-    <?php endforeach; ?>
-</div>
+<?php view('partials.stat-cards', ['items' => $kpis]); ?>
 
 <!-- ── Main Grid: Kelompok + Chart ────────────────────── -->
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
@@ -116,7 +87,7 @@ $kpis = [
                     <div class="h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <?php $pct = $grp['total_penilai'] > 0 ? ($grp['penilai_selesai']/$grp['total_penilai'])*100 : 0; ?>
                         <div class="h-1.5 rounded-full transition-all duration-700"
-                             style="width:<?= $pct ?>%; background:<?= $def['color'] ?? '#6366f1' ?>;"></div>
+                             style="width:<?= $pct ?>%; background:<?= $def['color'] ?? '#1e6347' ?>;"></div>
                     </div>
                     <div class="flex justify-between mt-1">
                         <span class="text-[10px] text-slate-400"><?= $grp['penilai_selesai'] ?> / <?= $grp['total_penilai'] ?> penilai selesai</span>
@@ -148,7 +119,7 @@ $kpis = [
         <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-5">
             <!-- Big Score -->
             <div class="text-center">
-                <div class="text-6xl font-black tracking-tight" style="background:linear-gradient(135deg,#6366f1,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                <div class="text-6xl font-black tracking-tight" style="background:linear-gradient(135deg,#1e6347,#17503a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
                     <?= ($rekap && $rekap['nkte'] > 0) ? number_format($rekap['nkte'],2) : '—' ?>
                 </div>
                 <div class="text-xs text-slate-400 font-medium mt-1">
@@ -161,8 +132,8 @@ $kpis = [
             <?php
             $predColor = ['Amat Baik'=>'#059669','Baik'=>'#2563eb','Cukup'=>'#d97706','Sedang'=>'#9333ea','Kurang'=>'#dc2626'];
             $predBg    = ['Amat Baik'=>'#ecfdf5','Baik'=>'#eff6ff','Cukup'=>'#fffbeb','Sedang'=>'#faf5ff','Kurang'=>'#fef2f2'];
-            $pColor = $predColor[$rekap['predikat']] ?? '#6366f1';
-            $pBg    = $predBg[$rekap['predikat']] ?? '#eef2ff';
+            $pColor = $predColor[$rekap['predikat']] ?? '#1e6347';
+            $pBg    = $predBg[$rekap['predikat']] ?? '#eef7f1';
             ?>
             <div class="px-5 py-2 rounded-full font-bold text-sm" style="background:<?= $pBg ?>;color:<?= $pColor ?>;border:1px solid <?= $pColor ?>22;">
                 <?= e($rekap['predikat']) ?>
@@ -186,7 +157,7 @@ $kpis = [
                 <div class="flex items-center space-x-2 text-[11px]">
                     <span class="w-14 font-semibold text-slate-500"><?= $kode ?></span>
                     <div class="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <div class="h-1.5 rounded-full" style="width:<?= $avg ?>%;background:<?= $def['color'] ?? '#6366f1' ?>;"></div>
+                        <div class="h-1.5 rounded-full" style="width:<?= $avg ?>%;background:<?= $def['color'] ?? '#1e6347' ?>;"></div>
                     </div>
                     <span class="w-9 text-right font-bold text-slate-600"><?= number_format($avg,1) ?></span>
                 </div>
@@ -203,7 +174,7 @@ $kpis = [
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <?php
         $actions = [
-            ['icon'=>'fa-calendar-plus', 'label'=>'Tambah Periode',   'url'=>'admin/periode',         'color'=>'#6366f1','bg'=>'rgba(99,102,241,0.08)'],
+            ['icon'=>'fa-calendar-plus', 'label'=>'Tambah Periode',   'url'=>'admin/periode',         'color'=>'#1e6347','bg'=>'rgba(30,99,71,0.08)'],
             ['icon'=>'fa-user-plus',     'label'=>'Tambah Pengguna',  'url'=>'admin/pengguna',        'color'=>'#10b981','bg'=>'rgba(16,185,129,0.08)'],
             ['icon'=>'fa-file-pdf',      'label'=>'Ekspor PDF',       'url'=>'laporan/pdf/1',         'color'=>'#ef4444','bg'=>'rgba(239,68,68,0.08)'],
             ['icon'=>'fa-file-excel',    'label'=>'Ekspor Excel',     'url'=>'laporan/excel/1',       'color'=>'#059669','bg'=>'rgba(5,150,105,0.08)'],
