@@ -267,6 +267,30 @@ class PenilaianController {
 
         audit_log('SUBMIT_PENILAIAN', 'penilaian', "Penilaian #{$penilaianId} disubmit oleh " . Auth::user()['username']);
 
+        // Kabari admin & kepala madrasah
+        $infoStmt = $pdo->prepare("
+            SELECT u.nama_lengkap AS nama_penilai, kp.nama_kelompok, m.nama_madrasah
+            FROM penilaian p
+            JOIN users u ON u.id = p.user_id
+            JOIN periode_penilai pp ON pp.id = p.periode_penilai_id
+            JOIN kelompok_penilai kp ON kp.id = pp.kelompok_id
+            JOIN periode_penilaian per ON per.id = p.periode_id
+            JOIN madrasah m ON m.id = per.madrasah_id
+            WHERE p.id = ?
+        ");
+        $infoStmt->execute([$penilaianId]);
+        $info = $infoStmt->fetch();
+
+        if ($info) {
+            notifikasi_kirim_ke_role(
+                ['admin', 'kamad'],
+                'Penilaian Disubmit',
+                $info['nama_penilai'] . ' (' . $info['nama_kelompok'] . ') mengirim nilai untuk ' . $info['nama_madrasah'] . '.',
+                base_url('laporan'),
+                Auth::id()
+            );
+        }
+
         json_response([
             'success' => true,
             'message' => 'Nilai berhasil disubmit! Anda tetap dapat memperbarui nilai di lain waktu.',

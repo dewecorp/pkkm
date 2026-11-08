@@ -27,6 +27,7 @@ use App\Controllers\Admin\PenggunaController;
 use App\Controllers\Admin\InstrumenController;
 use App\Controllers\Admin\AuditLogController;
 use App\Controllers\Admin\PengaturanController;
+use App\Controllers\NotifikasiController;
 
 $router = new Router();
 
@@ -104,6 +105,10 @@ $router->post('/admin/audit-log/clear', [AuditLogController::class, 'clear'], ['
 $router->get('/admin/pengaturan',          [PengaturanController::class, 'index'],   ['admin']);
 $router->post('/admin/pengaturan/update',  [PengaturanController::class, 'update'],  ['admin']);
 $router->post('/admin/pengaturan/reset-bg',[PengaturanController::class, 'resetBg'], ['admin']);
+
+// Notifikasi (admin & kepala madrasah)
+$router->get('/notifikasi',      [NotifikasiController::class, 'index'], ['admin', 'kamad']);
+$router->post('/notifikasi/read', [NotifikasiController::class, 'read'],  ['admin', 'kamad']);
 
 // Dispatch
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

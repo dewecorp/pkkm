@@ -266,7 +266,7 @@ async function saveScore(penilaianId, indikatorId, forcedSkor = null) {
 }
 
 async function submitPenilaian(penilaianId) {
-    const terisi = document.getElementById('headerTerisiCount')?.innerText || '0';
+    const terisi = document.getElementById('answeredCount')?.innerText || '0';
     const total = '<?= $total_indikator ?>';
     
     let infoText = 'Setelah disimpan & dikunci, skor Anda tidak dapat diubah lagi tanpa persetujuan administrator.';

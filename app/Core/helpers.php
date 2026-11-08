@@ -14,6 +14,32 @@ function asset_url(string $path): string {
     return base_url($path) . ($version ? '?v=' . $version : '');
 }
 
+function notifikasi_kirim_ke_role(array $kodeRole, string $judul, string $pesan, ?string $link = null, ?int $kecualiUserId = null): void {
+    try {
+        if (empty($kodeRole)) return;
+        $pdo = getDbConnection();
+        $in = implode(',', array_fill(0, count($kodeRole), '?'));
+        $stmt = $pdo->prepare("
+            SELECT DISTINCT u.id
+            FROM users u
+            JOIN user_roles ur ON ur.user_id = u.id
+            JOIN roles r ON r.id = ur.role_id
+            WHERE u.status = 'aktif' AND r.kode_role IN ($in)
+        ");
+        $stmt->execute($kodeRole);
+        $ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        if (!$ids) return;
+
+        $ins = $pdo->prepare("INSERT INTO notifikasi (user_id, tipe, judul, pesan, link) VALUES (?, 'penilaian', ?, ?, ?)");
+        foreach ($ids as $uid) {
+            if ($kecualiUserId && (int)$uid === $kecualiUserId) continue;
+            $ins->execute([(int)$uid, $judul, $pesan, $link]);
+        }
+    } catch (Throwable $e) {
+        // Notifikasi tidak boleh menggagalkan proses utama.
+    }
+}
+
 function view(string $viewPath, array $data = []): void {
     extract($data);
     $viewFile = __DIR__ . '/../../views/' . str_replace('.', '/', $viewPath) . '.php';

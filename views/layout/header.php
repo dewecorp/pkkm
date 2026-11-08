@@ -167,10 +167,28 @@
 
     <div class="flex-1"></div>
 
-    <!-- Notifications placeholder -->
-    <button class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition">
-        <i class="fa-regular fa-bell text-base"></i>
-    </button>
+    <?php if (\App\Core\Auth::hasAnyRole(['admin', 'kamad'])): ?>
+    <!-- Notifikasi: hanya admin & kepala madrasah -->
+    <div class="relative" id="notifWrap">
+        <button type="button" onclick="toggleNotif()" aria-label="Notifikasi"
+                class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition">
+            <i class="fa-regular fa-bell text-base"></i>
+            <span id="notifBadge"
+                  class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">0</span>
+        </button>
+        <div id="notifPanel"
+             class="hidden absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden z-50">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                <span class="text-xs font-bold text-slate-700">Notifikasi</span>
+                <button type="button" onclick="bacaSemuaNotif()"
+                        class="text-[11px] font-semibold text-brand-600 hover:underline">Tandai dibaca</button>
+            </div>
+            <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-slate-100">
+                <div class="px-4 py-6 text-center text-xs text-slate-400">Memuat…</div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <!-- User Chip -->
     <div class="flex items-center space-x-2.5 pl-2 border-l border-slate-100">
