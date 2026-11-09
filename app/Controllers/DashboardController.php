@@ -7,6 +7,10 @@ use PDO;
 
 class DashboardController {
     public function index() {
+        if (!Auth::check()) {
+            header('Location: ' . base_url('login'));
+            exit;
+        }
         if (Auth::hasRole('admin')) {
             $this->adminDashboard();
         } elseif (Auth::hasRole('kamad')) {

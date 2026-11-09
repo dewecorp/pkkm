@@ -37,8 +37,8 @@ $router->post('/login', [AuthController::class, 'login']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
 // Dashboard
-$router->get('/',                  [DashboardController::class, 'index']);
-$router->get('/dashboard',         [DashboardController::class, 'index']);
+$router->get('/',                  [DashboardController::class, 'index'], ['admin','kamad','penilai']);
+$router->get('/dashboard',         [DashboardController::class, 'index'], ['admin','kamad','penilai']);
 $router->get('/admin/dashboard',   [DashboardController::class, 'adminDashboard'],  ['admin']);
 $router->get('/kamad/dashboard',   [DashboardController::class, 'kamadDashboard'],  ['kamad']);
 $router->get('/penilai/dashboard', [DashboardController::class, 'penilaiDashboard'],['penilai']);
