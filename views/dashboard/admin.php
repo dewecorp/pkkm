@@ -173,3 +173,4 @@ $kpis = [
 </div><!-- /space-y-6 -->
 
 <?php view('layout.footer'); ?>
+

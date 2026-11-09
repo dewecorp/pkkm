@@ -36,7 +36,7 @@ class DashboardController {
         $activePeriode = $pStmt->fetch();
 
         $stats = [
-            'total_users' => $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn(),
+            'total_users'   => $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn(),
             'total_periode' => $pdo->query("SELECT COUNT(*) FROM periode_penilaian")->fetchColumn(),
             'total_penilai' => $pdo->query("SELECT COUNT(*) FROM user_roles ur JOIN roles r ON ur.role_id = r.id WHERE r.kode_role = 'penilai'")->fetchColumn(),
         ];
@@ -47,10 +47,10 @@ class DashboardController {
         }
 
         view('dashboard.admin', [
-            'title' => 'Dashboard Administrator',
+            'title'   => 'Dashboard Administrator',
             'periode' => $activePeriode,
-            'stats' => $stats,
-            'rekap' => $rekapData
+            'stats'   => $stats,
+            'rekap'   => $rekapData,
         ]);
     }
 
@@ -63,8 +63,8 @@ class DashboardController {
         $kmStmt->execute([$userId]);
         $kamad = $kmStmt->fetch();
 
-        $periode = null;
-        $rekap = null;
+        $periode     = null;
+        $rekap       = null;
         $isPublished = false;
 
         if ($kamad) {
@@ -80,21 +80,19 @@ class DashboardController {
             $periode = $pStmt->fetch();
 
             if ($periode) {
-                // Check publikasi
                 $pubStmt = $pdo->prepare("SELECT is_published FROM publikasi_hasil WHERE periode_id = ?");
                 $pubStmt->execute([$periode['id']]);
                 $isPublished = (bool)$pubStmt->fetchColumn();
-
                 $rekap = $calcService->calculatePeriodeRekap($periode['id']);
             }
         }
 
         view('dashboard.kamad', [
-            'title' => 'Dashboard Kepala Madrasah',
-            'kamad' => $kamad,
-            'periode' => $periode,
-            'rekap' => $rekap,
-            'is_published' => $isPublished
+            'title'        => 'Dashboard Kepala Madrasah',
+            'kamad'        => $kamad,
+            'periode'      => $periode,
+            'rekap'        => $rekap,
+            'is_published' => $isPublished,
         ]);
     }
 

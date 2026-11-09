@@ -18,6 +18,7 @@ use App\Core\Auth;
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\PenilaianController;
+use App\Controllers\FormPenilaianController;
 use App\Controllers\BuktiDukungController;
 use App\Controllers\ReportController;
 use App\Controllers\Admin\PeriodeController;
@@ -50,6 +51,19 @@ $router->get('/penilaian/form/{id}',   [PenilaianController::class, 'form'],    
 $router->post('/penilaian/save-score', [PenilaianController::class, 'saveScore'], ['admin','penilai']);
 $router->post('/penilaian/submit',     [PenilaianController::class, 'submit'],    ['admin','penilai']);
 $router->post('/penilaian/unlock',     [PenilaianController::class, 'unlock'],    ['admin']);
+
+// Menu: Form Penilaian (admin & kamad)
+$router->get('/form-penilaian', function() {
+    $c = new FormPenilaianController();
+    if (\App\Core\Auth::hasRole('admin')) {
+        $c->indexAdmin();
+    } else {
+        $c->indexKamad();
+    }
+}, ['admin', 'kamad']);
+$router->get('/form-penilaian/detail/{id}', [FormPenilaianController::class, 'detail'],      ['admin', 'kamad']);
+$router->get('/form-penilaian/cetak/{id}',  [FormPenilaianController::class, 'print'],       ['admin', 'kamad']);
+$router->get('/form-penilaian/excel/{id}',  [FormPenilaianController::class, 'exportExcel'], ['admin', 'kamad']);
 
 // Bukti Dukung
 $router->get('/bukti',              [BuktiDukungController::class, 'index']);

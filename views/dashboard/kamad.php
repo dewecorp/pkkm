@@ -170,3 +170,4 @@ $pColor = $predColor[$rekap['predikat']] ?? '#1e6347';
 
 </div>
 <?php view('layout.footer'); ?>
+
