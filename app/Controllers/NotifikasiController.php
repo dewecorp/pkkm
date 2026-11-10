@@ -12,6 +12,9 @@ class NotifikasiController {
         $pdo = getDbConnection();
         $userId = (int)Auth::id();
 
+        // Bersihkan notifikasi lebih dari 24 jam otomatis
+        $pdo->query("DELETE FROM notifikasi WHERE created_at < DATE_SUB(NOW(), INTERVAL 24 HOUR)");
+
         $stmt = $pdo->prepare("
             SELECT id, judul, pesan, link, is_read, created_at
             FROM notifikasi

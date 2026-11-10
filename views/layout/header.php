@@ -58,8 +58,71 @@
             --glass-border: rgba(255, 255, 255, 0.7);
             --glass-shadow: 0 24px 60px -32px rgba(11, 42, 30, 0.35);
         }
-        * { font-family: 'Inter', sans-serif; }
-        html { height: 100%; scroll-behavior: smooth; }
+        * {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        html {
+            height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        /* ── Scrollbar Halus Global ────────────────────────── */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.45);
+            border-radius: 999px;
+            transition: background 0.2s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 116, 139, 0.75);
+        }
+        ::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        /* Firefox standard scrollbar (kecuali yang di-hide) */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+        }
+
+        /* Hilangkan total scrollbar di sidebar dan elemen scrollbar-hide */
+        #sidebar, #sidebar nav, .scrollbar-hide {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+        #sidebar::-webkit-scrollbar,
+        #sidebar nav::-webkit-scrollbar,
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        /* Khusus scroll notifikasi */
+        #notifList {
+            scroll-behavior: smooth;
+            overscroll-behavior: contain;
+        }
+        #notifList::-webkit-scrollbar {
+            width: 5px;
+        }
+        #notifList::-webkit-scrollbar-thumb {
+            background: rgba(30, 99, 71, 0.35);
+            border-radius: 999px;
+        }
+        #notifList::-webkit-scrollbar-thumb:hover {
+            background: rgba(30, 99, 71, 0.65);
+        }
         body {
             min-height: 100%;
             background:
@@ -94,20 +157,26 @@
             color: #6ee7b7 !important;
         }
 
-        /* ── Glass surfaces ───────────────────────────────── */
+        /* ── Glass surfaces (Kemenag Glassy) ──────────────── */
         .glass-topbar {
-            background: linear-gradient(135deg, rgba(30, 99, 71, 0.92) 0%, rgba(23, 80, 58, 0.95) 100%) !important;
-            backdrop-filter: blur(14px) saturate(150%);
-            -webkit-backdrop-filter: blur(14px) saturate(150%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
-            box-shadow: 0 4px 20px -4px rgba(11, 42, 30, 0.35) !important;
+            background: rgba(30, 99, 71, 0.78) !important;
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+            box-shadow: 0 4px 24px -2px rgba(11, 42, 30, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        }
+        .glass-topbar a, .glass-topbar button {
+            color: #ffffff;
+        }
+        .glass-topbar i {
+            color: #ffffff;
         }
         .glass-sidebar {
-            background: linear-gradient(180deg, rgba(26, 88, 63, 0.93) 0%, rgba(19, 68, 49, 0.96) 100%) !important;
-            backdrop-filter: blur(16px) saturate(150%);
-            -webkit-backdrop-filter: blur(16px) saturate(150%);
-            border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
-            box-shadow: 4px 0 28px rgba(11, 42, 30, 0.25) !important;
+            background: rgba(22, 78, 55, 0.82) !important;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-right: 1px solid rgba(255, 255, 255, 0.18) !important;
+            box-shadow: 4px 0 28px rgba(11, 42, 30, 0.22), inset -1px 0 0 rgba(255, 255, 255, 0.14) !important;
         }
         .glass-page {
             position: relative;
@@ -240,10 +309,10 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
 
     <!-- Logo -->
     <a href="<?= base_url('dashboard') ?>" class="flex items-center space-x-2.5 shrink-0 group">
-        <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-brand-800 text-sm shadow-md bg-white border border-white/40">P</div>
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm shadow-md bg-white border border-white/40" style="color:#1e6347;">P</div>
         <div class="hidden sm:block">
             <div class="font-extrabold text-white text-sm leading-tight tracking-tight">PKKM</div>
-            <div class="text-[10px] text-emerald-100/80 font-medium leading-tight">Kinerja Kepala Madrasah</div>
+            <div class="text-[10px] font-medium leading-tight" style="color:#a7f3d0;">Kinerja Kepala Madrasah</div>
         </div>
     </a>
 
@@ -252,27 +321,29 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
     <?php if ($bolehNotif): ?>
     <!-- Notifikasi: hanya admin & kepala madrasah -->
     <button type="button" data-notif-toggle onclick="toggleNotif()" aria-label="Notifikasi"
-            class="relative w-9 h-9 flex items-center justify-center rounded-xl text-white/90 hover:text-white hover:bg-white/15 transition">
-        <i class="fa-regular fa-bell text-base"></i>
+            class="relative w-9 h-9 flex items-center justify-center rounded-xl transition hover:bg-white/15" style="color:#ffffff;">
+        <i class="fa-regular fa-bell text-base" style="color:#ffffff;"></i>
         <span data-notif-badge
               class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-[#1e6347]">0</span>
     </button>
     <?php endif; ?>
 
-    <!-- User Chip -->
-    <div class="flex items-center space-x-2.5 pl-3 border-l border-white/20">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-brand-800 bg-white shadow-xs shrink-0 border border-white/40">
+    <!-- User Chip (Pill Capsule rapi tanpa garis border pembatas aneh) -->
+    <div class="flex items-center gap-2.5 px-3 py-1 rounded-full bg-white/15 border border-white/20 shadow-xs backdrop-blur-sm">
+        <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-white shadow-xs shrink-0 border border-white/40" style="color:#1e6347;">
             <?= $userInitial ?>
         </div>
         <div class="hidden sm:block">
-            <div class="text-xs font-semibold text-white leading-tight max-w-[140px] truncate"><?= e($userName) ?></div>
+            <div class="text-xs font-bold text-white leading-tight max-w-[150px] truncate"><?= e($userName) ?></div>
             <?php $roles = \App\Core\Auth::roles(); ?>
-            <div class="text-[10px] text-emerald-200 font-semibold capitalize"><?= e(implode(', ', $roles)) ?></div>
+            <div class="text-[10px] font-semibold capitalize leading-tight" style="color:#a7f3d0;"><?= e(implode(', ', $roles)) ?></div>
         </div>
-        <a href="<?= base_url('logout') ?>" data-logout class="ml-1 w-8 h-8 flex items-center justify-center rounded-xl text-white/80 hover:text-rose-200 hover:bg-white/15 transition" title="Keluar">
-            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
-        </a>
     </div>
+
+    <!-- Tombol Logout -->
+    <a href="<?= base_url('logout') ?>" data-logout class="w-8 h-8 flex items-center justify-center rounded-xl transition hover:bg-white/15" style="color:#ffffff;" title="Keluar">
+        <i class="fa-solid fa-arrow-right-from-bracket text-sm" style="color:#ffffff;"></i>
+    </a>
 </header>
 
 <!-- ===== APP BAR (mobile) ===== -->
@@ -347,32 +418,28 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
 <?php endif; ?>
 
 <!-- ===== SIDEBAR (desktop only) ===== -->
-<aside id="sidebar" class="glass-sidebar fixed top-16 left-0 bottom-0 z-30 w-64 border-r hidden lg:flex flex-col overflow-y-auto scrollbar-hide">
+<aside id="sidebar" class="glass-sidebar fixed top-16 left-0 bottom-0 z-30 w-64 border-r hidden lg:flex flex-col overflow-hidden">
 
-    <!-- Nav Sections -->
-    <nav class="flex-1 p-3 space-y-1">
+    <!-- Nav Sections (Tanpa scrollbar, menu kompak pas) -->
+    <nav class="flex-1 p-2.5 space-y-0.5 overflow-y-auto scrollbar-hide">
 
         <?php foreach ($nav as $item): ?>
             <?php $active = $isActive($item['key']); ?>
             <a href="<?= base_url($item['url']) ?>"
-               class="sidebar-item <?= $active ? 'active' : '' ?> flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium">
+               class="sidebar-item <?= $active ? 'active' : '' ?> flex items-center space-x-3 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium">
                 <i class="fa-solid <?= $item['icon'] ?> w-4 text-center"></i>
                 <span><?= $item['label'] ?></span>
             </a>
         <?php endforeach; ?>
     </nav>
 
-    <!-- Sidebar Footer -->
-    <div class="p-3 border-t border-white/15">
-        <div class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-white/10 border border-white/15 shadow-xs">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs text-brand-800 bg-white shrink-0 shadow-xs border border-white/40">
-                <?= strtoupper(substr(\App\Core\Auth::user()['nama_lengkap'] ?? 'U', 0, 1)) ?>
-            </div>
-            <div class="flex-1 min-w-0">
-                <div class="text-xs font-semibold text-white truncate"><?= e(\App\Core\Auth::user()['nama_lengkap'] ?? '') ?></div>
-                <div class="text-[10px] text-emerald-200/90 truncate"><?= e(\App\Core\Auth::user()['jabatan'] ?? implode(', ', \App\Core\Auth::roles())) ?></div>
-            </div>
-        </div>
+    <!-- Sidebar Footer: Tombol Keluar Selalu Terlihat (Pinned Bottom, shrink-0) -->
+    <div class="p-2.5 border-t border-white/15 shrink-0 bg-transparent">
+        <a href="<?= base_url('logout') ?>" data-logout
+           class="flex items-center space-x-3 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-rose-200 hover:text-white bg-rose-500/20 hover:bg-rose-600/35 border border-rose-400/35 transition shadow-xs group">
+            <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center text-rose-300 group-hover:text-white transition"></i>
+            <span>Keluar Sistem</span>
+        </a>
     </div>
 </aside>
 
