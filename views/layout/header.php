@@ -68,29 +68,46 @@
                 radial-gradient(900px 600px at 50% 110%, rgba(13, 148, 136, 0.12), transparent 62%),
                 linear-gradient(160deg, #f3f7f4 0%, #eef3f0 45%, #e8f0eb 100%);
         }
-        .sidebar-item { transition: background-color .15s, color .15s; }
-        .sidebar-item:hover { background: rgba(30, 99, 71, 0.08); }
-        .sidebar-item.active {
-            background: linear-gradient(135deg, rgba(30, 99, 71, 0.15) 0%, rgba(23, 80, 58, 0.1) 100%);
-            border-right: 2px solid #1e6347;
-            color: #1e6347;
+        .sidebar-item {
+            color: rgba(255, 255, 255, 0.82) !important;
+            transition: all .15s ease;
         }
-        .sidebar-item.active i { color: #1e6347; }
+        .sidebar-item i {
+            color: rgba(167, 243, 208, 0.85) !important;
+            transition: color .15s ease;
+        }
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+        }
+        .sidebar-item:hover i {
+            color: #ffffff !important;
+        }
+        .sidebar-item.active {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.12) 100%) !important;
+            border-right: 3px solid #34d399 !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+        .sidebar-item.active i {
+            color: #6ee7b7 !important;
+        }
 
         /* ── Glass surfaces ───────────────────────────────── */
         .glass-topbar {
-            background: rgba(255, 255, 255, 0.78) !important;
-            backdrop-filter: blur(12px) saturate(140%);
-            -webkit-backdrop-filter: blur(12px) saturate(140%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.65) !important;
-            box-shadow: 0 1px 3px rgba(11, 42, 30, 0.06) !important;
+            background: linear-gradient(135deg, rgba(30, 99, 71, 0.92) 0%, rgba(23, 80, 58, 0.95) 100%) !important;
+            backdrop-filter: blur(14px) saturate(150%);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
+            box-shadow: 0 4px 20px -4px rgba(11, 42, 30, 0.35) !important;
         }
         .glass-sidebar {
-            background: rgba(255, 255, 255, 0.72) !important;
-            backdrop-filter: blur(12px) saturate(140%);
-            -webkit-backdrop-filter: blur(12px) saturate(140%);
-            border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
-            box-shadow: 1px 0 0 rgba(255, 255, 255, 0.35) !important;
+            background: linear-gradient(180deg, rgba(26, 88, 63, 0.93) 0%, rgba(19, 68, 49, 0.96) 100%) !important;
+            backdrop-filter: blur(16px) saturate(150%);
+            -webkit-backdrop-filter: blur(16px) saturate(150%);
+            border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 4px 0 28px rgba(11, 42, 30, 0.25) !important;
         }
         .glass-page {
             position: relative;
@@ -137,7 +154,8 @@
         details:not([open]) .panduan-close-label { display: none; }
 
         @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-            .glass-topbar, .glass-sidebar { background: rgba(255, 255, 255, 0.96) !important; }
+            .glass-topbar { background: #17503a !important; }
+            .glass-sidebar { background: #144633 !important; }
             .glass-page { background: rgba(255, 255, 255, 0.9); }
             .card { background: rgba(255, 255, 255, 0.96); }
         }
@@ -221,12 +239,11 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
 <header class="glass-topbar hidden lg:flex fixed top-0 left-0 right-0 z-40 h-16 border-b items-center px-4 lg:px-6 gap-4">
 
     <!-- Logo -->
-    <a href="<?= base_url('dashboard') ?>" class="flex items-center space-x-2.5 shrink-0">
-        <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-white text-sm shadow"
-             style="background:linear-gradient(135deg,#1e6347,#17503a);">P</div>
+    <a href="<?= base_url('dashboard') ?>" class="flex items-center space-x-2.5 shrink-0 group">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-brand-800 text-sm shadow-md bg-white border border-white/40">P</div>
         <div class="hidden sm:block">
-            <div class="font-bold text-slate-800 text-sm leading-tight tracking-tight">PKKM</div>
-            <div class="text-[10px] text-slate-400 font-medium leading-tight">Kinerja Kepala Madrasah</div>
+            <div class="font-extrabold text-white text-sm leading-tight tracking-tight">PKKM</div>
+            <div class="text-[10px] text-emerald-100/80 font-medium leading-tight">Kinerja Kepala Madrasah</div>
         </div>
     </a>
 
@@ -235,33 +252,32 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
     <?php if ($bolehNotif): ?>
     <!-- Notifikasi: hanya admin & kepala madrasah -->
     <button type="button" data-notif-toggle onclick="toggleNotif()" aria-label="Notifikasi"
-            class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition">
+            class="relative w-9 h-9 flex items-center justify-center rounded-xl text-white/90 hover:text-white hover:bg-white/15 transition">
         <i class="fa-regular fa-bell text-base"></i>
         <span data-notif-badge
-              class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">0</span>
+              class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-[#1e6347]">0</span>
     </button>
     <?php endif; ?>
 
     <!-- User Chip -->
-    <div class="flex items-center space-x-2.5 pl-2 border-l border-slate-100">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white shrink-0"
-             style="background:linear-gradient(135deg,#1e6347,#17503a);">
+    <div class="flex items-center space-x-2.5 pl-3 border-l border-white/20">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-brand-800 bg-white shadow-xs shrink-0 border border-white/40">
             <?= $userInitial ?>
         </div>
         <div class="hidden sm:block">
-            <div class="text-xs font-semibold text-slate-700 leading-tight max-w-[140px] truncate"><?= e($userName) ?></div>
+            <div class="text-xs font-semibold text-white leading-tight max-w-[140px] truncate"><?= e($userName) ?></div>
             <?php $roles = \App\Core\Auth::roles(); ?>
-            <div class="text-[10px] text-brand-600 font-semibold capitalize"><?= e(implode(', ', $roles)) ?></div>
+            <div class="text-[10px] text-emerald-200 font-semibold capitalize"><?= e(implode(', ', $roles)) ?></div>
         </div>
-        <a href="<?= base_url('logout') ?>" data-logout class="ml-1 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition" title="Keluar">
+        <a href="<?= base_url('logout') ?>" data-logout class="ml-1 w-8 h-8 flex items-center justify-center rounded-xl text-white/80 hover:text-rose-200 hover:bg-white/15 transition" title="Keluar">
             <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
         </a>
     </div>
 </header>
 
 <!-- ===== APP BAR (mobile) ===== -->
-<header class="lg:hidden fixed top-0 left-0 right-0 z-40 h-16 rounded-b-3xl shadow-lg flex items-center gap-3 px-4"
-        style="background:linear-gradient(135deg,#1e6347 0%,#17503a 100%);">
+<header class="lg:hidden fixed top-0 left-0 right-0 z-40 h-16 rounded-b-3xl shadow-lg flex items-center gap-3 px-4 border-b border-white/15"
+        style="background:linear-gradient(135deg,rgba(30,99,71,0.94) 0%,rgba(23,80,58,0.96) 100%);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);">
 
     <?php if ($isDashboard): ?>
         <!-- Dashboard: logo + nama aplikasi -->
@@ -339,23 +355,22 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
         <?php foreach ($nav as $item): ?>
             <?php $active = $isActive($item['key']); ?>
             <a href="<?= base_url($item['url']) ?>"
-               class="sidebar-item <?= $active ? 'active' : '' ?> flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium <?= $active ? 'text-brand-600' : 'text-slate-600' ?>">
-                <i class="fa-solid <?= $item['icon'] ?> w-4 text-center <?= $active ? 'text-brand-500' : 'text-slate-400' ?>"></i>
+               class="sidebar-item <?= $active ? 'active' : '' ?> flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium">
+                <i class="fa-solid <?= $item['icon'] ?> w-4 text-center"></i>
                 <span><?= $item['label'] ?></span>
             </a>
         <?php endforeach; ?>
     </nav>
 
     <!-- Sidebar Footer -->
-    <div class="p-3 border-t border-slate-100">
-        <div class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-50">
-            <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-white shrink-0"
-                 style="background:linear-gradient(135deg,#1e6347,#17503a);">
+    <div class="p-3 border-t border-white/15">
+        <div class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-white/10 border border-white/15 shadow-xs">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs text-brand-800 bg-white shrink-0 shadow-xs border border-white/40">
                 <?= strtoupper(substr(\App\Core\Auth::user()['nama_lengkap'] ?? 'U', 0, 1)) ?>
             </div>
             <div class="flex-1 min-w-0">
-                <div class="text-xs font-semibold text-slate-700 truncate"><?= e(\App\Core\Auth::user()['nama_lengkap'] ?? '') ?></div>
-                <div class="text-[10px] text-slate-400"><?= e(\App\Core\Auth::user()['jabatan'] ?? implode(', ', \App\Core\Auth::roles())) ?></div>
+                <div class="text-xs font-semibold text-white truncate"><?= e(\App\Core\Auth::user()['nama_lengkap'] ?? '') ?></div>
+                <div class="text-[10px] text-emerald-200/90 truncate"><?= e(\App\Core\Auth::user()['jabatan'] ?? implode(', ', \App\Core\Auth::roles())) ?></div>
             </div>
         </div>
     </div>
