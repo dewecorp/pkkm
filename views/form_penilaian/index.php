@@ -53,7 +53,7 @@ $belumMulai    = count(array_filter($list, fn($r) => (int)$r['terisi_indikator']
     ] as [$label, $val, $icon, $color]): ?>
     <div class="card p-4 flex items-center gap-3">
         <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0
-            <?= $color==='emerald'?'bg-emerald-50':'($color==="amber"?"bg-amber-50":"bg-brand-50")' ?>">
+            <?= $color==='emerald' ? 'bg-emerald-50' : ($color==='amber' ? 'bg-amber-50' : 'bg-brand-50') ?>">
             <i class="fa-solid <?= $icon ?> text-sm
                 <?= $color==='emerald'?'text-emerald-600':($color==='amber'?'text-amber-600':'text-brand-600') ?>"></i>
         </div>

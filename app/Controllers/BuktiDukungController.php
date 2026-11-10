@@ -9,11 +9,27 @@ class BuktiDukungController {
         $pdo = getDbConnection();
 
         // Periode list
-        $periodeList = $pdo->query("SELECT id, nama_periode, tahun_penilaian, status FROM periode_penilaian ORDER BY id DESC")->fetchAll();
+        $periodeList = $pdo->query("SELECT id, nama_periode, tahun_penilaian, status, jenis_penilaian FROM periode_penilaian ORDER BY id DESC")->fetchAll();
         $periodeId = (int)($_GET['periode_id'] ?? ($periodeList[0]['id'] ?? 0));
 
+        // Deteksi periode aktif
+        $currentPeriode = null;
+        foreach ($periodeList as $p) {
+            if ((int)$p['id'] === $periodeId) {
+                $currentPeriode = $p;
+                break;
+            }
+        }
+        if (!$currentPeriode && !empty($periodeList)) {
+            $currentPeriode = $periodeList[0];
+            $periodeId = (int)$currentPeriode['id'];
+        }
+
+        $isTahunan = ($currentPeriode && $currentPeriode['jenis_penilaian'] === 'tahunan');
+
         // Get snapshot components for this period with count of indicators & count of uploaded files
-        $kompStmt = $pdo->prepare("
+        // Jika periode tahunan, sembunyikan komponen ke-5 (hanya nomor_komponen 1 s/d 4)
+        $kompSql = "
             SELECT sk.*,
                    COUNT(DISTINCT si.id) as total_indikator,
                    COUNT(DISTINCT bd.id) as total_bukti
@@ -21,14 +37,20 @@ class BuktiDukungController {
             LEFT JOIN snapshot_tugas_utama stu ON stu.snapshot_komponen_id = sk.id
             LEFT JOIN snapshot_indikator si ON si.snapshot_tugas_id = stu.id
             LEFT JOIN bukti_dukung bd ON bd.snapshot_indikator_id = si.id
-            WHERE sk.periode_id = ?
+            WHERE sk.periode_id = ? " . ($isTahunan ? "AND sk.nomor_komponen <= 4 " : "") . "
             GROUP BY sk.id
             ORDER BY sk.nomor_komponen ASC
-        ");
+        ";
+        $kompStmt = $pdo->prepare($kompSql);
         $kompStmt->execute([$periodeId]);
         $komponenList = $kompStmt->fetchAll();
 
-        $activeKompId = (int)($_GET['komponen_id'] ?? ($komponenList[0]['id'] ?? 0));
+        // Validasi activeKompId agar selalu berada di komponen yang diizinkan
+        $validKompIds = array_map(fn($k) => (int)$k['id'], $komponenList);
+        $reqKompId = (int)($_GET['komponen_id'] ?? 0);
+        $activeKompId = in_array($reqKompId, $validKompIds, true)
+            ? $reqKompId
+            : ($validKompIds[0] ?? 0);
 
         // Tasks for active component
         $tugasStmt = $pdo->prepare("
@@ -51,13 +73,17 @@ class BuktiDukungController {
         $indikatorRows = $indStmt->fetchAll();
 
         // Get all bukti dukung for this period and group by snapshot_indikator_id
-        $buktiStmt = $pdo->prepare("
+        $buktiSql = "
             SELECT bd.*, u.nama_lengkap as pengunggah
             FROM bukti_dukung bd
             JOIN users u ON bd.uploaded_by = u.id
+            " . ($isTahunan ? "JOIN snapshot_indikator si ON bd.snapshot_indikator_id = si.id
+                               JOIN snapshot_tugas_utama stu ON si.snapshot_tugas_id = stu.id
+                               JOIN snapshot_komponen sk ON stu.snapshot_komponen_id = sk.id AND sk.nomor_komponen <= 4 " : "") . "
             WHERE bd.periode_id = ?
             ORDER BY bd.id DESC
-        ");
+        ";
+        $buktiStmt = $pdo->prepare($buktiSql);
         $buktiStmt->execute([$periodeId]);
         $allBukti = $buktiStmt->fetchAll();
 
@@ -81,6 +107,8 @@ class BuktiDukungController {
             'title'            => 'Bukti Dukung Kinerja',
             'periodeList'      => $periodeList,
             'currentPeriodeId' => $periodeId,
+            'currentPeriode'   => $currentPeriode,
+            'isTahunan'        => $isTahunan,
             'komponenList'     => $komponenList,
             'activeKompId'     => $activeKompId,
             'tugasList'        => $tugasList,

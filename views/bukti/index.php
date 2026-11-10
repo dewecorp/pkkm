@@ -5,11 +5,16 @@
 <!-- ── Page Header ─────────────────────────────────────────── -->
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
-        <div class="flex items-center space-x-2.5">
+        <div class="flex flex-wrap items-center gap-2">
             <h1 class="text-xl font-bold text-slate-800 tracking-tight">Bukti Dukung Kinerja</h1>
             <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200">
                 <?= $totalUploaded ?> Berkas Terunggah
             </span>
+            <?php if (!empty($isTahunan)): ?>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Tahunan (Komponen 1–4)
+            </span>
+            <?php endif; ?>
         </div>
         <p class="text-sm text-slate-500 mt-0.5">Unggah berkas bukti autentik langsung pada butir indikator per komponen (mendukung multi upload berkas sekaligus)</p>
     </div>
@@ -20,7 +25,7 @@
         <select name="periode_id" onchange="this.form.submit()" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-brand-500 outline-none">
             <?php foreach ($periodeList as $p): ?>
             <option value="<?= $p['id'] ?>" <?= $p['id'] == $currentPeriodeId ? 'selected' : '' ?>>
-                <?= e($p['nama_periode']) ?> (<?= $p['tahun_penilaian'] ?>)
+                <?= e($p['nama_periode']) ?> (<?= $p['tahun_penilaian'] ?><?= !empty($p['jenis_penilaian']) ? ' &middot; ' . ($p['jenis_penilaian'] === 'tahunan' ? 'Tahunan' : '4 Tahunan') : '' ?>)
             </option>
             <?php endforeach; ?>
         </select>
