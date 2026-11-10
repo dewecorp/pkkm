@@ -302,6 +302,12 @@ $appTitle = $title ?? 'PKKM';
 $userName = \App\Core\Auth::user()['nama_lengkap'] ?? 'Pengguna';
 $userInitial = strtoupper(substr($userName, 0, 1));
 $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
+
+$hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+$bulanIndo = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+$tglSekarang = $hariIndo[(int)date('w')] . ', ' . date('j') . ' ' . $bulanIndo[(int)date('n')] . ' ' . date('Y');
+$jamSekarang = date('H:i:s');
+$appLogo = get_setting('app_logo', 'img/logo-kemenag.svg');
 ?>
 
 <!-- ===== TOPBAR (desktop) ===== -->
@@ -309,7 +315,9 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
 
     <!-- Logo -->
     <a href="<?= base_url('dashboard') ?>" class="flex items-center space-x-2.5 shrink-0 group">
-        <div class="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm shadow-md bg-white border border-white/40" style="color:#1e6347;">P</div>
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center p-1 shadow-md bg-white border border-white/40">
+            <img src="<?= base_url($appLogo) ?>" alt="Logo PKKM" class="w-full h-full object-contain">
+        </div>
         <div class="hidden sm:block">
             <div class="font-extrabold text-white text-sm leading-tight tracking-tight">PKKM</div>
             <div class="text-[10px] font-medium leading-tight" style="color:#a7f3d0;">Kinerja Kepala Madrasah</div>
@@ -317,6 +325,19 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
     </a>
 
     <div class="flex-1"></div>
+
+    <!-- Hari, Tanggal & Jam Realtime -->
+    <div class="hidden lg:flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/20 shadow-xs backdrop-blur-sm select-none">
+        <div class="flex items-center gap-1.5 text-xs text-white font-medium">
+            <i class="fa-regular fa-calendar-days text-xs" style="color:#a7f3d0;"></i>
+            <span id="navDate"><?= $tglSekarang ?></span>
+        </div>
+        <span class="text-white/30 text-xs">|</span>
+        <div class="flex items-center gap-1.5 text-xs font-bold font-mono tracking-wider" style="color:#a7f3d0;">
+            <i class="fa-regular fa-clock text-xs" style="color:#a7f3d0;"></i>
+            <span id="navClock"><?= $jamSekarang ?></span>
+        </div>
+    </div>
 
     <?php if ($bolehNotif): ?>
     <!-- Notifikasi: hanya admin & kepala madrasah -->
@@ -353,8 +374,9 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
     <?php if ($isDashboard): ?>
         <!-- Dashboard: logo + nama aplikasi -->
         <a href="<?= base_url($dashboardUrl) ?>" class="flex items-center gap-2.5 min-w-0">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 border border-white/25"
-                 style="background:rgba(255,255,255,0.14);">P</div>
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center p-1 shrink-0 bg-white shadow-xs border border-white/40">
+                <img src="<?= base_url($appLogo) ?>" alt="Logo PKKM" class="w-full h-full object-contain">
+            </div>
             <div class="min-w-0">
                 <div class="text-white font-bold text-sm leading-tight tracking-tight">PKKM</div>
                 <div class="text-white/70 text-[10px] leading-tight truncate"><?= e($roleLabel) ?></div>
@@ -436,9 +458,10 @@ $bolehNotif = \App\Core\Auth::hasAnyRole(['admin', 'kamad']);
     <!-- Sidebar Footer: Tombol Keluar Selalu Terlihat (Pinned Bottom, shrink-0) -->
     <div class="p-2.5 border-t border-white/15 shrink-0 bg-transparent">
         <a href="<?= base_url('logout') ?>" data-logout
-           class="flex items-center space-x-3 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-rose-200 hover:text-white bg-rose-500/20 hover:bg-rose-600/35 border border-rose-400/35 transition shadow-xs group">
-            <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center text-rose-300 group-hover:text-white transition"></i>
-            <span>Keluar Sistem</span>
+           class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition group"
+           style="background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 0 16px rgba(255, 255, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);">
+            <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center text-white" style="color: #ffffff !important;"></i>
+            <span style="color: #ffffff !important;">Keluar Sistem</span>
         </a>
     </div>
 </aside>

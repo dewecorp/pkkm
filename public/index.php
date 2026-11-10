@@ -116,9 +116,10 @@ $router->get('/admin/audit-log',        [AuditLogController::class, 'index'], ['
 $router->post('/admin/audit-log/clear', [AuditLogController::class, 'clear'], ['admin']);
 
 // ── Admin: Pengaturan Sistem & Tampilan ──────────────────────────────────────
-$router->get('/admin/pengaturan',          [PengaturanController::class, 'index'],   ['admin']);
-$router->post('/admin/pengaturan/update',  [PengaturanController::class, 'update'],  ['admin']);
-$router->post('/admin/pengaturan/reset-bg',[PengaturanController::class, 'resetBg'], ['admin']);
+$router->get('/admin/pengaturan',            [PengaturanController::class, 'index'],     ['admin']);
+$router->post('/admin/pengaturan/update',    [PengaturanController::class, 'update'],    ['admin']);
+$router->post('/admin/pengaturan/reset-bg',  [PengaturanController::class, 'resetBg'],   ['admin']);
+$router->post('/admin/pengaturan/reset-logo',[PengaturanController::class, 'resetLogo'], ['admin']);
 
 // Notifikasi (admin & kepala madrasah)
 $router->get('/notifikasi',      [NotifikasiController::class, 'index'], ['admin', 'kamad']);

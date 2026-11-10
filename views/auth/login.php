@@ -1,5 +1,6 @@
 <?php
 $bgImage = get_setting('login_bg_image', 'img/gedung-kemenag.jpg');
+$appLogo = get_setting('app_logo', 'img/logo-kemenag.svg');
 $loginTitle = get_setting('login_title', 'Aplikasi Penilaian Kinerja Kepala Madrasah');
 $loginSubtitle = get_setting('login_subtitle', 'Kementerian Agama Kabupaten Jepara');
 $loginDesc = get_setting('login_desc', 'Sistem informasi untuk mendukung penilaian kinerja kepala madrasah secara transparan, akuntabel, dan terintegrasi pada lingkungan Kementerian Agama Kabupaten Jepara.');
@@ -183,8 +184,8 @@ $loginDesc = get_setting('login_desc', 'Sistem informasi untuk mendukung penilai
             <!-- Logo Kemenag Ikhlas Beramal -->
             <div class="text-center space-y-2">
                 <div class="flex justify-center">
-                    <img src="<?= base_url('img/logo-kemenag.svg') ?>" 
-                         alt="Logo Kementerian Agama" 
+                    <img src="<?= base_url($appLogo) ?>" 
+                         alt="Logo Instansi" 
                          class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-sm">
                 </div>
 

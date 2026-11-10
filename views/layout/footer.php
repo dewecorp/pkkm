@@ -7,6 +7,30 @@
 </footer>
 
 <script>
+// Jam & Tanggal Realtime Navbar
+(function () {
+    const dateEl = document.getElementById('navDate');
+    const clockEl = document.getElementById('navClock');
+    if (!dateEl && !clockEl) return;
+
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+    function tick() {
+        const now = new Date();
+        if (dateEl) {
+            dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        }
+        if (clockEl) {
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            clockEl.textContent = `${h}:${m}:${s}`;
+        }
+    }
+    setInterval(tick, 1000);
+})();
+
 // Sheet akun mobile
 window.bukaAkun = function () {
     const sheet = document.getElementById('akunSheet');
